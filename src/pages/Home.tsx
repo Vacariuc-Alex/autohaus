@@ -1,6 +1,18 @@
 import {useEffect, useState} from "react";
+import PageSelector from "../components/PageSelector";
+import BasicPagination from "../components/BasicPagination";
 
 const Home = () => {
+
+    type UnparsedProduct = {
+        first: number,
+        next: number,
+        prev: number,
+        last: number,
+        pages: number,
+        items: number,
+        data: Product[]
+    };
 
     type Product = {
         id: string,
@@ -12,38 +24,30 @@ const Home = () => {
         price: number
     };
 
-    type PagedProduct = {
-        first: number,
-        next: number,
-        prev: number,
-        last: number,
-        pages: number,
-        items: number,
-        data: Product[]
-    };
-
-    const [pagedProducts, setPpagedProducts] = useState<Product[]>([]);
+    const [unparsedProducts, setUnparsedProducts] = useState<UnparsedProduct | null>(null);
     const [products, setProducts] = useState<Product[]>([]);
+    const [elementsPerPage, setElementsPerPage] = useState<number>(10);
+    const [numberOfPages, setNumberOfPages] = useState<number>(0);
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const [error, setError] = useState<string | null>(null);
-
-    const [elementsPerPage, setElementsPerPage] = useState<number>(5);
-    const [page, setPage] = useState<number>(3);
 
     useEffect(() => {
 
-        const fetchAllPagedProducts = async (): Promise<PagedProduct> => {
-            const response = await fetch(`http://localhost:3001/products?_page=${page}&_per_page=${elementsPerPage}`);
+        const fetchUnparsedProducts = async (): Promise<UnparsedProduct> => {
+            const response = await fetch(`http://localhost:3001/products?_page=${currentPage}&_per_page=${elementsPerPage}`);
             return await response.json();
         }
 
-        const fetchAllProducts = async (): Promise<Product[]> => {
-            return await fetchAllPagedProducts().then(e => e.data);
+        const fetchProducts = async () => {
+            const unparsedProducts = await fetchUnparsedProducts();
+            setUnparsedProducts(unparsedProducts);
+            setNumberOfPages(unparsedProducts.pages);
+            setProducts(unparsedProducts.data);
         }
 
         const fetchData = async () => {
             try {
-                const products = await fetchAllProducts();
-                setProducts(products);
+                await fetchProducts();
             } catch (error: any) {
                 setError(error.message);
             }
@@ -52,7 +56,15 @@ const Home = () => {
         fetchData();
     });
 
-    if(error) {
+    const handleElementsPerPageChange = (e: number) => {
+        setElementsPerPage(e);
+    };
+
+    const handleCurrentPage = (e: number) => {
+        setCurrentPage(e);
+    };
+
+    if (error) {
         return (
             <div>Error: {error}</div>
         );
@@ -60,6 +72,8 @@ const Home = () => {
 
     return (
         <>
+            <PageSelector onElementsPerPageChange={handleElementsPerPageChange} />
+            <BasicPagination numberOfPages={numberOfPages} currentPage={handleCurrentPage}/>
             {
                 products.map(e => (
                     <>
@@ -70,7 +84,8 @@ const Home = () => {
                         <p>{e.vin}</p>
                         <p>{e.color}</p>
                         <p>{e.price}</p>
-                        <br/><hr/>
+                        <br/>
+                        <hr/>
                     </>
                 ))
             }
