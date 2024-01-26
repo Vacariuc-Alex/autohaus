@@ -6,10 +6,10 @@ import FormControl from '@mui/material/FormControl';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 
 type PageSelectorProps = {
-    onElementsPerPageChange: (elementsPerPage: number) => void;
+    onElementsPerPageChangeProp: (e: number) => void;
 }
 
-const PageSelector: React.FC<PageSelectorProps> = ({onElementsPerPageChange}) => {
+const PageSelector: React.FC<PageSelectorProps> = ({onElementsPerPageChangeProp}) => {
 
     const [elementsPerPage, setElementsPerPage] = useState<number>(10);
 
@@ -17,10 +17,10 @@ const PageSelector: React.FC<PageSelectorProps> = ({onElementsPerPageChange}) =>
         console.log(typeof e)
         const elementsPerPage: number = parseInt(e.target.value);
         setElementsPerPage(elementsPerPage);
-        onElementsPerPageChange(elementsPerPage);
+        onElementsPerPageChangeProp(elementsPerPage);
     }
 
-    return(
+    return (
         <Box sx={{minWidth: 120}}>
             <FormControl fullWidth>
                 <InputLabel id="elements-per-page-label">Elements per Page</InputLabel>
