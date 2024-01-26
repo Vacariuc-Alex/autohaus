@@ -4,26 +4,26 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 type BasicPaginationProps = {
-    numberOfPages: number,
-    currentPage: (selectedPage: number) => void
+    numberOfPagesProp: number,
+    currentPageProp: (e: number) => void
 }
 
-const BasicPagination: React.FC<BasicPaginationProps> = ({numberOfPages, currentPage}) => {
+const BasicPagination: React.FC<BasicPaginationProps> = ({numberOfPagesProp, currentPageProp}) => {
 
     const [selectedPage, setSelectedPage] = useState<number>(1);
 
     const handleCurrentPageChange = (e: any) => { //ToDo: Blocker, need to use normal type
         const textContent = e.target.textContent;
-        if(textContent) {
+        if (textContent) {
             const selectedPage = parseInt(textContent);
             setSelectedPage(selectedPage);
-            currentPage(selectedPage);
+            currentPageProp(selectedPage);
         }
     }
 
     return (
         <Stack spacing={2}>
-            <Pagination count={numberOfPages} onChange={handleCurrentPageChange}/>
+            <Pagination count={numberOfPagesProp} onChange={handleCurrentPageChange}/>
         </Stack>
     );
 }
