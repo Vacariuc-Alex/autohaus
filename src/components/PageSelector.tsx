@@ -14,16 +14,15 @@ const PageSelector: React.FC<PageSelectorProps> = ({onElementsPerPageChangeProp}
     const [elementsPerPage, setElementsPerPage] = useState<number>(10);
 
     const handleSelectChange = (e: SelectChangeEvent) => {
-        console.log(typeof e)
         const elementsPerPage: number = parseInt(e.target.value);
         setElementsPerPage(elementsPerPage);
         onElementsPerPageChangeProp(elementsPerPage);
     }
 
     return (
-        <Box sx={{minWidth: 120}}>
+        <Box sx={{minWidth: 100, maxWidth: 960, margin: "0 100px"}}>
             <FormControl fullWidth>
-                <InputLabel id="elements-per-page-label">Elements per Page</InputLabel>
+                <InputLabel id="elements-per-page-label" sx={{top: -12}}>Elements per Page</InputLabel>
                 <Select
                     labelId="elements-per-page-label"
                     id="products-per-page"

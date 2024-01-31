@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {useState} from 'react';
+import React, {BaseSyntheticEvent, useState} from 'react';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
@@ -12,7 +11,7 @@ const BasicPagination: React.FC<BasicPaginationProps> = ({numberOfPagesProp, cur
 
     const [selectedPage, setSelectedPage] = useState<number>(1);
 
-    const handleCurrentPageChange = (e: any) => { //ToDo: Blocker, need to use normal type
+    const handleCurrentPageChange = (e: BaseSyntheticEvent) => {
         const textContent = e.target.textContent;
         if (textContent) {
             const selectedPage = parseInt(textContent);
@@ -22,8 +21,8 @@ const BasicPagination: React.FC<BasicPaginationProps> = ({numberOfPagesProp, cur
     }
 
     return (
-        <Stack spacing={2}>
-            <Pagination count={numberOfPagesProp} onChange={handleCurrentPageChange}/>
+        <Stack sx={{margin: "20px 100px"}}>
+            <Pagination count={Math.ceil(numberOfPagesProp)} onChange={handleCurrentPageChange}/>
         </Stack>
     );
 }
