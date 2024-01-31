@@ -22,7 +22,7 @@ const BasicPagination: React.FC<BasicPaginationProps> = ({numberOfPagesProp, cur
     }
 
     return (
-        <Stack spacing={2}>
+        <Stack sx={{margin: "20px 100px"}}>
             <Pagination count={numberOfPagesProp} onChange={handleCurrentPageChange}/>
         </Stack>
     );
