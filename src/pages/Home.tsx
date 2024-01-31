@@ -3,6 +3,9 @@ import axios, {AxiosResponse} from "axios";
 import PageSelector from "../components/PageSelector";
 import BasicPagination from "../components/BasicPagination";
 import CompanyFilter from "../components/CompanyFilter";
+import InfoCard from "../components/InfoCard";
+import ContentCanvas from "../utils/styledComponents/ContentCanvas";
+import Flex from "../utils/styledComponents/Flex";
 
 const Home = () => {
 
@@ -53,6 +56,7 @@ const Home = () => {
         }
 
         fetchData();
+        //console.log('Hello'); //ToDo: Blocker, if i uncomment the console.log, there will be an infinite loop
     });
 
     const handleElementsPerPageChange = (e: number) => {
@@ -75,24 +79,18 @@ const Home = () => {
 
     return (
         <>
+            <Flex>
+                <ContentCanvas>
+                    {
+                        products.map(e => (
+                            <InfoCard elementProperties={e}/>
+                        ))
+                    }
+                </ContentCanvas>
+                <CompanyFilter companyProp={handleCompany}/>
+            </Flex>
             <PageSelector onElementsPerPageChangeProp={handleElementsPerPageChange}/>
             <BasicPagination numberOfPagesProp={numberOfPages} currentPageProp={handleCurrentPage}/>
-            <CompanyFilter companyProp={handleCompany}/>
-            {
-                products.map(e => (
-                    <>
-                        <p>{e.id}</p>
-                        <p>{e.company}</p>
-                        <p>{e.model}</p>
-                        <p>{e.year}</p>
-                        <p>{e.vin}</p>
-                        <p>{e.color}</p>
-                        <p>{e.price}</p>
-                        <br/>
-                        <hr/>
-                    </>
-                ))
-            }
         </>
     );
 }
