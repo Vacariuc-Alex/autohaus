@@ -1,31 +1,47 @@
 import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
-import React, {useState} from "react";
+import React, {BaseSyntheticEvent, useState} from "react";
 import {companies} from "../utils/dataProvider/Companies";
 import RightPanel from "../utils/styledComponents/RightPanel";
 
-type CompanyFilterProps = {
-    companyProp: (e: string) => void
+type CompaniesFilterProps = {
+    companiesProp: (e: string[]) => void
 }
 
-const CompanyFilter: React.FC<CompanyFilterProps> = ({companyProp}) => {
+const CompanyFilter: React.FC<CompaniesFilterProps> = ({companiesProp}) => {
 
-    const [selectedCompany, setSelectedCompany] = useState<string>("");
+    const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
 
-    const handleCompanyChange = (e: any) => {
+    const appendNewCompany = (newCompany: string) => {
+        if (!selectedCompanies.includes(newCompany)){
+            setSelectedCompanies(prev => {
+                const updatedCompanies = [...prev, newCompany];
+                companiesProp(updatedCompanies);
+                return updatedCompanies;
+            });
+        }
+    };
+
+    const removeExistingCompany = (company: string) => {
+        let index = selectedCompanies.indexOf(company);
+        if (index !== -1) {
+            selectedCompanies.splice(index, 1);
+            setSelectedCompanies(prev => {
+                const updatedCompanies = [...prev];
+                companiesProp(updatedCompanies);
+                return updatedCompanies;
+            });
+        }
+    };
+
+    const handleCompanyChange = (e: BaseSyntheticEvent) => {
         const state: boolean = e.target.checked;
         const value: string = e.target.value;
 
         if (state) {
-            setSelectedCompany(value);
-            companyProp(value);
+            appendNewCompany(value);
         } else {
-            setSelectedCompany("");
-            companyProp("");
+            removeExistingCompany(value);
         }
-    }
-
-    const handleChecked = (index: number) => {
-        return selectedCompany === companies[index];
     }
 
     const formGroupStyle = {
@@ -40,13 +56,13 @@ const CompanyFilter: React.FC<CompanyFilterProps> = ({companyProp}) => {
         <RightPanel>
             <FormGroup sx={formGroupStyle}>
                 {
-                    companies.map((e: string, index: number) => (
+                    companies.map((e: string, i: number) => (
                         <FormControlLabel control={<Checkbox/>}
                                           sx={{width: "200px"}}
-                                          checked={handleChecked(index)}
                                           onChange={handleCompanyChange}
-                                          value={companies[index]}
-                                          label={companies[index]}/> //ToDo: Blocker, need to use multiple checkes (see: Home-> fetch)
+                                          value={companies[i]}
+                                          label={companies[i]}
+                                          key={i}/>
                     ))
                 }
             </FormGroup>

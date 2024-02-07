@@ -1,11 +1,11 @@
 import {useEffect, useState} from "react";
-import axios, {AxiosResponse} from "axios";
-import PageSelector from "../components/PageSelector";
-import BasicPagination from "../components/BasicPagination";
 import CompanyFilter from "../components/CompanyFilter";
 import InfoCard from "../components/InfoCard";
 import ContentCanvas from "../utils/styledComponents/ContentCanvas";
 import Flex from "../utils/styledComponents/Flex";
+import useAxios from "../utils/hooks/useAxios";
+import PageSelector from "../components/PageSelector";
+import BasicPagination from "../components/BasicPagination";
 
 const Home = () => {
 
@@ -19,47 +19,55 @@ const Home = () => {
         price: number
     };
 
-    const [unparsedProducts, setUnparsedProducts] = useState<AxiosResponse<any, any> | null>(null);
     const [products, setProducts] = useState<Product[]>([]);
+    const [companies, setCompanies] = useState<string[]>([]);
     const [elementsPerPage, setElementsPerPage] = useState<number>(10);
     const [numberOfPages, setNumberOfPages] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [company, setCompany] = useState<string>("");
-    const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-
-        const fetchUnparsedProducts = async (): Promise<AxiosResponse<any>> => {
-            console.log(company)
-            return await axios.get(`http://localhost:3001/products`, {
-                params: {
-                    _page: currentPage,
-                    _per_page: elementsPerPage,
-                    company: company //ToDo: Blocker, cannot pass more companies (see: CompanyFilter)
-                }
-            });
-        }
-
-        const fetchProducts = async () => {
-            const unparsedProducts = await fetchUnparsedProducts();
-            setUnparsedProducts(unparsedProducts);
-            setNumberOfPages(unparsedProducts.data.pages);
-            setProducts(unparsedProducts.data.data);
-        }
-
-        const fetchData = async () => {
-            try {
-                await fetchProducts();
-            } catch (error: any) {
-                setError(error.message);
-            }
-        }
-
-        fetchData();
-        //console.log('Hello'); //ToDo: Blocker, if i uncomment the console.log, there will be an infinite loop
+    const {response, error, loading} = useAxios({
+        method: 'get',
+        url: '/products'
     });
 
+    const filterProductsByCompanies = (responseData: Product[], companies: string[]) => {
+        return companies.length !== 0
+            ? responseData.filter((e: Product) => companies.includes(e.company))
+            : responseData;
+    }
+
+    const calculateNumberOfPages = (sortedProducts: Product[], elementsPerPage: number) => {
+        return Math.ceil(sortedProducts.length / elementsPerPage)
+    };
+
+    const limitSortedProducts  = (i: number, j: number, sortedProducts: Product[], elementsPerPage: number) => {
+        return j < elementsPerPage && j < sortedProducts.length - (i * elementsPerPage)
+    };
+    
+    const displayElements = () => {
+        if (response !== null) {
+            const responseData = response.data;
+            let sortedProducts: Product[] = filterProductsByCompanies(responseData, companies);
+            const calculatedPages = calculateNumberOfPages(sortedProducts, elementsPerPage);
+            let pagedProducts: Product[][] = [];
+
+            setNumberOfPages(calculatedPages);
+            for (let i = 0; i < calculatedPages; i++) {
+                pagedProducts[i] = [];
+                for (let j = 0; limitSortedProducts(i, j, sortedProducts, elementsPerPage); j++) {
+                    pagedProducts[i][j] = sortedProducts[i * elementsPerPage + j];
+                }
+            }
+            setProducts(pagedProducts[currentPage - 1]);
+        }
+    }
+
+    useEffect(() => {
+        displayElements();
+    }, [companies, currentPage, elementsPerPage, response]);
+
     const handleElementsPerPageChange = (e: number) => {
+        setCurrentPage(1);
         setElementsPerPage(e);
     };
 
@@ -67,13 +75,18 @@ const Home = () => {
         setCurrentPage(e);
     };
 
-    const handleCompany = (e: string) => {
-        setCompany(e);
+    const handleCompanies = (e: string[]) => {
+        setCurrentPage(1);
+        setCompanies(e);
     }
 
     if (error) {
         return (
-            <div>Error: {error}</div>
+            <h1>Error: {error}</h1>
+        );
+    } else if (loading) {
+        return (
+            <h1>Loading...</h1>
         );
     }
 
@@ -82,12 +95,12 @@ const Home = () => {
             <Flex>
                 <ContentCanvas>
                     {
-                        products.map(e => (
-                            <InfoCard elementProperties={e}/>
+                        products.map((e, i) => (
+                            <InfoCard elementProperties={e} key={i}/>
                         ))
                     }
                 </ContentCanvas>
-                <CompanyFilter companyProp={handleCompany}/>
+                <CompanyFilter companiesProp={handleCompanies}/>
             </Flex>
             <PageSelector onElementsPerPageChangeProp={handleElementsPerPageChange}/>
             <BasicPagination numberOfPagesProp={numberOfPages} currentPageProp={handleCurrentPage}/>

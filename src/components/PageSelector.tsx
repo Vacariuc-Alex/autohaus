@@ -14,7 +14,6 @@ const PageSelector: React.FC<PageSelectorProps> = ({onElementsPerPageChangeProp}
     const [elementsPerPage, setElementsPerPage] = useState<number>(10);
 
     const handleSelectChange = (e: SelectChangeEvent) => {
-        console.log(typeof e)
         const elementsPerPage: number = parseInt(e.target.value);
         setElementsPerPage(elementsPerPage);
         onElementsPerPageChangeProp(elementsPerPage);
