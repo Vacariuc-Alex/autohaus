@@ -10,13 +10,14 @@ import BasicPagination from "../components/BasicPagination";
 const Home = () => {
 
     type Product = {
-        id: string,
+        id: number,
         company: string,
         model: string,
         year: number,
         vin: string,
         color: string,
-        price: number
+        price: number,
+        isFavourite?: boolean
     };
 
     const [products, setProducts] = useState<Product[]>([]);
