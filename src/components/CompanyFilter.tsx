@@ -1,7 +1,10 @@
 import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
 import React, {BaseSyntheticEvent, useState} from "react";
-import {companies} from "../utils/dataProvider/Companies";
 import RightPanel from "../utils/styledComponents/RightPanel";
+import {useSelector} from "react-redux";
+import {RootState} from "../utils/redux/store";
+import {createSelector} from "@reduxjs/toolkit";
+import {Product} from "../utils/constants/constants";
 
 type CompaniesFilterProps = {
     companiesProps: (e: string[]) => void
@@ -11,6 +14,18 @@ const CompanyFilter = (props: CompaniesFilterProps) => {
 
     const {companiesProps} = props;
     const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
+    const selectorArg = (state: RootState) => state.productsStore.responseData;
+    const selectorCombiner = (xSelector: Product[]) => {
+        return Array.from(
+            new Set(
+                xSelector.map((e) => {
+                    return e.company;
+                })
+            )
+        ).sort();
+    };
+    const combinedSelector = createSelector(selectorArg, selectorCombiner);
+    const selector = useSelector(combinedSelector);
 
     const appendNewCompany = (newCompany: string) => {
         if (!selectedCompanies.includes(newCompany)) {
@@ -57,12 +72,12 @@ const CompanyFilter = (props: CompaniesFilterProps) => {
         <RightPanel>
             <FormGroup sx={formGroupStyle}>
                 {
-                    companies.map((e: string, i: number) => (
+                    selector.map((e: string, i: number) => (
                         <FormControlLabel control={<Checkbox/>}
                                           sx={{width: "200px"}}
                                           onChange={handleCompanyChange}
-                                          value={companies[i]}
-                                          label={companies[i]}
+                                          value={selector[i]}
+                                          label={selector[i]}
                                           key={i}/>
                     ))
                 }

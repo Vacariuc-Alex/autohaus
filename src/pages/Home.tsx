@@ -51,7 +51,11 @@ const Home = () => {
                 pagedProducts[i][j] = sortedProducts[i * elementsPerPage + j];
             }
         }
-        setProducts(pagedProducts[currentPage - 1]);
+
+        // Ensures that the products will be set only after all variables are loaded
+        setProducts((prev) => {
+            return pagedProducts.length !== 0 ? pagedProducts[currentPage - 1] : prev;
+        });
     }
 
     useEffect(() => {

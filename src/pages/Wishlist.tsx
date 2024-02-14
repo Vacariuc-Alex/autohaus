@@ -11,14 +11,13 @@ const Wishlist = () => {
 
     const selectWishListIds = (state: RootState) => state.wishListStore.ids;
     const selectResponseData = (state: RootState) => state.productsStore.responseData;
-    const selectorOptions = (wishListIds: number[], responseData: Product[]) => {
+    const selectorCombiner = (wishListIds: number[], responseData: Product[]) => {
         return {
             wishListIds,
             responseData
         };
     }
-
-    const combinedSelector = createSelector(selectWishListIds, selectResponseData, selectorOptions);
+    const combinedSelector = createSelector(selectWishListIds, selectResponseData, selectorCombiner);
     const selector = useSelector(combinedSelector);
 
     const getElement = (e: number): Product => {
