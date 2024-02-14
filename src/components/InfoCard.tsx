@@ -1,70 +1,59 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {Card, CardActionArea, CardContent, CardMedia, Checkbox, Typography,} from "@mui/material";
 import autoImg from "../assets/img/Auto.jpg";
-import {addItem, removeItem} from "../utils/redux/wishList";
+import {addItem, removeItem} from "../utils/redux/wishListReducer";
 import {useDispatch, useSelector} from "react-redux"
-import {RootState} from "../utils/redux/store";
 import FavouriteArea from "../utils/styledComponents/FavouriteArea";
 import {IoIosHeart, IoIosHeartEmpty} from "react-icons/io";
+import {Product} from "../utils/constants/constants";
+import {RootState} from "../utils/redux/store";
 
+type InfoCardProps = {
+    productProps: Product
+};
 
-type Element = {
-    elementProperties: {
-        id: number,
-        company: string,
-        model: string,
-        year: number,
-        vin: string,
-        color: string,
-        price: number,
-        isFavourite?: boolean
-    };
-}
+const InfoCard = (props: InfoCardProps) => {
+    const {productProps}  = props;
+    const product: Product = JSON.parse(JSON.stringify(productProps));
+    const {id, company, model, year, vin, color, price} = product;
 
-const InfoCard: React.FC<Element> = ({elementProperties}) => {
-
-    const {id, company, model, year, vin, color, price} = elementProperties;
-
-    const [favouriteAreaVisibility, setFavouriteAreaVisibility] = useState({display: "none"});
+    const [favouriteAreaVisibility, setFavouriteAreaVisibility] = useState({opacity: "0", transition: ""});
     const dispatch = useDispatch();
-    const wishList = useSelector((state: RootState) => {
-        return state.wishList.ids;
+
+    const selector = useSelector((state: RootState) => {
+        return state.wishListStore.ids;
     });
 
-    //For logs only
-    useEffect(() => {
-        console.log(wishList);
-    }, [wishList]);
+    const isProductFavourite = selector.includes(id);
+
+    const toggleFavouriteAreaVisibility = (opacity: string) => {
+        setFavouriteAreaVisibility({opacity: opacity, transition: "opacity 0.3s ease"});
+    }
 
     useEffect(() => {
-        if (!elementProperties.isFavourite) {
-            setFavouriteAreaVisibility({display: "none"});
+        if (!isProductFavourite) {
+            toggleFavouriteAreaVisibility("0");
         } else {
-            setFavouriteAreaVisibility({display: "block"});
+            toggleFavouriteAreaVisibility("1");
         }
-    }, [elementProperties]);
+    }, [productProps]);
 
     const handleFavouriteItemWasSelected = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.checked) {
-            elementProperties.isFavourite = true;
             dispatch(addItem(id));
         } else {
-            elementProperties.isFavourite = false;
             dispatch(removeItem(id));
         }
-    }
-
-    const handleItemCheckState = () => {
-        return !!elementProperties.isFavourite;
+        toggleFavouriteAreaVisibility(e.target.checked ? "1" : "0");
     }
 
     const handleOnMouseEnter = () => {
-        setFavouriteAreaVisibility({display: "block"});
+        toggleFavouriteAreaVisibility("1");
     }
 
     const handleOnMouseLeave = () => {
-        if (!elementProperties.isFavourite) {
-            setFavouriteAreaVisibility({display: "none"});
+        if (!isProductFavourite) {
+            toggleFavouriteAreaVisibility("0");
         }
     }
 
@@ -75,7 +64,7 @@ const InfoCard: React.FC<Element> = ({elementProperties}) => {
                     <Checkbox sx={{bottom: 25, padding: 0}}
                               icon={<IoIosHeartEmpty/>}
                               checkedIcon={<IoIosHeart/>}
-                              checked={handleItemCheckState()}
+                              checked={isProductFavourite}
                               onChange={handleFavouriteItemWasSelected}/>
                 </FavouriteArea>
                 <CardMedia

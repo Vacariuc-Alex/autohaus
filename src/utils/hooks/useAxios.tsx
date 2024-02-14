@@ -13,7 +13,6 @@ const useAxios = ({url, method}: Axios) => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
 
-
     const fetchData = () => {
         axios[method](url)
             .then((response) => {

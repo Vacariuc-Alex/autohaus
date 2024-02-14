@@ -4,18 +4,19 @@ import {companies} from "../utils/dataProvider/Companies";
 import RightPanel from "../utils/styledComponents/RightPanel";
 
 type CompaniesFilterProps = {
-    companiesProp: (e: string[]) => void
+    companiesProps: (e: string[]) => void
 }
 
-const CompanyFilter: React.FC<CompaniesFilterProps> = ({companiesProp}) => {
+const CompanyFilter = (props: CompaniesFilterProps) => {
 
+    const {companiesProps} = props;
     const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
 
     const appendNewCompany = (newCompany: string) => {
-        if (!selectedCompanies.includes(newCompany)){
+        if (!selectedCompanies.includes(newCompany)) {
             setSelectedCompanies(prev => {
                 const updatedCompanies = [...prev, newCompany];
-                companiesProp(updatedCompanies);
+                companiesProps(updatedCompanies);
                 return updatedCompanies;
             });
         }
@@ -27,7 +28,7 @@ const CompanyFilter: React.FC<CompaniesFilterProps> = ({companiesProp}) => {
             selectedCompanies.splice(index, 1);
             setSelectedCompanies(prev => {
                 const updatedCompanies = [...prev];
-                companiesProp(updatedCompanies);
+                companiesProps(updatedCompanies);
                 return updatedCompanies;
             });
         }

@@ -1,15 +1,15 @@
 import {createSlice} from '@reduxjs/toolkit'
 
-export type WishList = {
+export type WishListReducer = {
     ids: number[]
 }
 
-const initialState: WishList = {
+const initialState: WishListReducer = {
     ids: [],
 }
 
 export const wishListSlice = createSlice({
-    name: 'wishList',
+    name: 'wishListSlice',
     initialState,
     reducers: {
         addItem: (state, action) => {
@@ -19,7 +19,7 @@ export const wishListSlice = createSlice({
         },
         removeItem: (state, action) => {
             const index = state.ids.findIndex((e) => e === action.payload);
-            if(index !== -1) {
+            if (index !== -1) {
                 state.ids.splice(index, 1);
             }
         }
