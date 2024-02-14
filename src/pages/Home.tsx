@@ -10,6 +10,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {fetchDataRequest} from "../utils/redux/productsReducer";
 import {RootState} from "../utils/redux/store";
 import {Product} from "../utils/constants/constants";
+import Loading from "../components/Loading";
 
 const Home = () => {
 
@@ -62,7 +63,7 @@ const Home = () => {
         if (!isRequestExecuted) {
             dispatch(fetchDataRequest());
         }
-    }, [isRequestExecuted])
+    }, [isRequestExecuted]);
 
     const handleElementsPerPageChange = (e: number) => {
         setCurrentPage(1);
@@ -84,7 +85,7 @@ const Home = () => {
         );
     } else if (loading) {
         return (
-            <h1>Loading...</h1>
+            <Loading/>
         );
     }
 
