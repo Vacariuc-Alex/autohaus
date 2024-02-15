@@ -27,13 +27,13 @@ const Wishlist = () => {
 
     return (
         <>
-            <Navbar/>
-            <ContentCanvas style={{width: "100%"}}>
+            <Navbar data-testid="app-bar"/>
+            <ContentCanvas data-testid="content-canvas" style={{width: "100%"}}>
                 {selector.wishListIds.length !== 0
                     ? selector.wishListIds.map((e, i) => (
-                        <InfoCard productProps={getElement(e)} key={i}/>
+                        <InfoCard data-testid="card" productProps={getElement(e)} key={i}/>
                     ))
-                    : <NoItems/>
+                    : <NoItems data-testid="no-item-container"/>
                 }
             </ContentCanvas>
         </>

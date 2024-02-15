@@ -85,29 +85,33 @@ const Home = () => {
 
     if (error) {
         return (
-            <h1>Error: {error}</h1>
+            <h1 data-testid="error">Error: {error}</h1>
         );
     } else if (loading) {
         return (
-            <Loading/>
+            <Loading data-testid="q"/>
         );
     }
 
     return (
         <>
-            <Navbar/>
-            <Flex>
-                <ContentCanvas>
+            <Navbar data-testid="app-bar"/>
+            <Flex data-testid="flex">
+                <ContentCanvas data-testid="content-canvas">
                     {
                         products.map((e, i) => (
-                            <InfoCard productProps={e} key={i}/>
+                            <InfoCard data-testid="card" productProps={e} key={i}/>
                         ))
                     }
                 </ContentCanvas>
-                <CompanyFilter companiesProps={handleCompanies}/>
+                <CompanyFilter data-testid="right-panel" companiesProps={handleCompanies}/>
             </Flex>
-            <PageSelector onElementsPerPageChangeProp={handleElementsPerPageChange}/>
-            <BasicPagination numberOfPagesProp={numberOfPages} currentPageProp={handleCurrentPage}/>
+            <PageSelector data-testid="box-component" onElementsPerPageChangeProp={handleElementsPerPageChange}/>
+            <BasicPagination
+                data-testid="pagination-stack"
+                numberOfPagesProp={numberOfPages}
+                currentPageProp={handleCurrentPage}
+            />
         </>
     );
 }

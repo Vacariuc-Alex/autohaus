@@ -39,23 +39,25 @@ const BasicPagination: React.FC<BasicPaginationProps> = ({numberOfPagesProp, cur
 
     const ArrowBack = () => {
         return (
-            <ArrowBackIcon onClick={goToPreviousPage}/>
+            <ArrowBackIcon onClick={goToPreviousPage} data-testid="arrow-back-icon"/>
         );
     }
 
     const ArrowForward = () => {
         return (
-            <ArrowForwardIcon onClick={goToNextPage}/>
+            <ArrowForwardIcon onClick={goToNextPage} data-testid="arrow-forward-icon"/>
         );
     }
 
     return (
-        <Stack sx={{margin: "20px 100px"}}>
+        <Stack sx={{margin: "20px 100px"}} data-testid="pagination-stack">
             <Pagination
+                data-testid="pagination-component"
                 onChange={handleCurrentPageChange}
                 count={Math.ceil(numberOfPagesProp)}
                 renderItem={(item) => (
                     <PaginationItem
+                        data-testid="pagination-item"
                         slots={{
                             previous: ArrowBack,
                             next: ArrowForward
