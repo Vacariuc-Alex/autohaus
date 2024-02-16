@@ -6,6 +6,7 @@ import ContentCanvas from "../utils/styledComponents/ContentCanvas";
 import {Product} from "../utils/constants/constants";
 import InfoCard from "../components/InfoCard";
 import {createSelector} from "@reduxjs/toolkit";
+import NoItems from "../components/NoItems";
 
 const Wishlist = () => {
 
@@ -28,10 +29,11 @@ const Wishlist = () => {
         <>
             <Navbar/>
             <ContentCanvas style={{width: "100%"}}>
-                {
-                    selector.wishListIds.map((e, i) => (
+                {selector.wishListIds.length !== 0
+                    ? selector.wishListIds.map((e, i) => (
                         <InfoCard productProps={getElement(e)} key={i}/>
                     ))
+                    : <NoItems/>
                 }
             </ContentCanvas>
         </>
