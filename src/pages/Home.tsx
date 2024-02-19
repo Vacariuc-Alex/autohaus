@@ -89,7 +89,7 @@ const Home = () => {
         );
     } else if (loading) {
         return (
-            <Loading data-testid="q"/>
+            <Loading data-testid="box"/>
         );
     }
 
