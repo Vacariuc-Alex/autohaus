@@ -5,6 +5,7 @@ import wishListReducer, {addItem, removeItem} from "../../utils/redux/wishListRe
 import {Provider} from "react-redux";
 import {initialState} from "../../utils/constants/testConstants";
 import productsReducer from "../../utils/redux/productsReducer";
+import userSelectionReducer from "../../utils/redux/userSelectionReducer";
 
 //Globals
 const mockProduct = initialState.productsStore.responseData[0];
@@ -16,7 +17,8 @@ const infoCardContent: [number, string][] = [[0, "WAZ 2106, Red, 1986"], [1, "25
 const mockStore = configureStore({
     reducer: {
         wishListStore: wishListReducer,
-        productsStore: productsReducer
+        productsStore: productsReducer,
+        userSelectionStore: userSelectionReducer
     },
     preloadedState: initialState,
 });

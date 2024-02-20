@@ -9,14 +9,16 @@ import {Provider} from "react-redux";
 import deepCopy from "../../utils/helpers/deepCopy";
 import renderer from "react-test-renderer";
 import Wishlist from "../Wishlist";
+import userSelectionReducer from "../../utils/redux/userSelectionReducer";
 
 //Mock store
 const mockStore = configureStore({
     reducer: {
         wishListStore: wishListReducer,
-        productsStore: productsReducer
+        productsStore: productsReducer,
+        userSelectionStore: userSelectionReducer
     },
-    preloadedState: initialState
+    preloadedState: initialState,
 });
 
 //Mock useNavigate
@@ -61,7 +63,8 @@ describe("Home component", () => {
             const copyMockStore = configureStore({
                 reducer: {
                     wishListStore: wishListReducer,
-                    productsStore: productsReducer
+                    productsStore: productsReducer,
+                    userSelectionStore: userSelectionReducer
                 },
                 preloadedState: copyInitialState
             });
@@ -83,7 +86,8 @@ describe("Home component", () => {
             const copyMockStore = configureStore({
                 reducer: {
                     wishListStore: wishListReducer,
-                    productsStore: productsReducer
+                    productsStore: productsReducer,
+                    userSelectionStore: userSelectionReducer
                 },
                 preloadedState: copyInitialState
             });

@@ -25,7 +25,7 @@ describe("PageNotFound component", () => {
     test("Should render PageNotFound component", () => {
         render(<PageNotFound/>);
         const navbar = screen.getByTestId("app-bar");
-        const notFoundContainer = screen.getByTestId("not-found-container");
+        const notFoundContainer = screen.getByTestId("page-not-found-container");
         const typographies = within(notFoundContainer).getAllByTestId("typography");
         const image = within(notFoundContainer).getByRole("img");
 

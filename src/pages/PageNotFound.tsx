@@ -2,7 +2,7 @@ import React from "react";
 import {useSpring} from "react-spring";
 import Navbar from "../components/Navbar";
 import {Typography} from "@mui/material";
-import {NotFoundContainer} from "../utils/styledComponents/NotFoundContainer";
+import {PageNotFoundContainer} from "../utils/styledComponents/PageNotFoundContainer";
 import pageNotFoundImage from "../assets/img/PageNotFound.png"
 
 const PageNotFound = () => {
@@ -16,7 +16,7 @@ const PageNotFound = () => {
     return (
         <>
             <Navbar/>
-            <NotFoundContainer data-testid="not-found-container" style={animationProps}>
+            <PageNotFoundContainer data-testid="page-not-found-container" style={animationProps}>
                 <Typography
                     data-testid="typography"
                     sx={{fontSize: "100px", color: "#c71919", letterSpacing: '.2rem', fontWeight: 700}}
@@ -33,7 +33,7 @@ const PageNotFound = () => {
                     Sorry, the page you're looking for does not exist!
                 </Typography>
                 <img src={pageNotFoundImage} style={{width: 120, marginTop: 20}} alt="Not found!"/>
-            </NotFoundContainer>
+            </PageNotFoundContainer>
         </>
     );
 }

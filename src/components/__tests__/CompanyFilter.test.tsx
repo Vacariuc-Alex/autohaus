@@ -5,15 +5,14 @@ import {configureStore} from "@reduxjs/toolkit";
 import productsReducer from "../../utils/redux/productsReducer";
 import {initialState} from "../../utils/constants/testConstants";
 import wishListReducer from "../../utils/redux/wishListReducer";
-
-//Globals
-const mockCompanies = jest.fn();
+import userSelectionReducer from "../../utils/redux/userSelectionReducer";
 
 // Mock store
 const mockStore = configureStore({
     reducer: {
         wishListStore: wishListReducer,
-        productsStore: productsReducer
+        productsStore: productsReducer,
+        userSelectionStore: userSelectionReducer
     },
     preloadedState: initialState,
 });
@@ -26,13 +25,13 @@ describe("CompanyFilter component", () => {
     test("Should render CompanyFilter component", () => {
         render(
             <Provider store={mockStore}>
-                <CompanyFilter companiesProps={mockCompanies}/>
+                <CompanyFilter/>
             </Provider>
         );
         const rightPanel = screen.getByTestId("right-panel");
-        const formGroup = screen.getByTestId("form-group");
-        const formControlLabel = screen.getAllByTestId("form-control-label");
-        const checkbox = screen.getAllByTestId("checkbox");
+        const formGroup = within(rightPanel).getByTestId("form-group");
+        const formControlLabel = within(formGroup).getAllByTestId("form-control-label");
+        const checkbox = within(formGroup).getAllByTestId("checkbox");
 
         expect(rightPanel).toBeInTheDocument();
         expect(formGroup).toBeInTheDocument();
@@ -43,7 +42,7 @@ describe("CompanyFilter component", () => {
     test("Should check the checkbox and add the element to selectedCompanies and remove from selectedCompanies when uncheck checkbox", () => {
         render(
             <Provider store={mockStore}>
-                <CompanyFilter companiesProps={mockCompanies}/>
+                <CompanyFilter/>
             </Provider>
         );
 
@@ -53,10 +52,10 @@ describe("CompanyFilter component", () => {
 
         //check the checkbox
         fireEvent.click(checkbox);
-        expect(mockCompanies).toHaveBeenCalledWith(["UAZ"]);
+        expect(mockStore.getState().userSelectionStore.selectedCompanies).toEqual(["UAZ"]);
 
         //uncheck the checkbox
         fireEvent.click(checkbox);
-        expect(mockCompanies).toHaveBeenCalledWith([]);
+        expect(mockStore.getState().userSelectionStore.selectedCompanies).toEqual([]);
     });
 });

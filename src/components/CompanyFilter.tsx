@@ -1,65 +1,50 @@
 import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
-import React, {BaseSyntheticEvent, useState} from "react";
+import React, {BaseSyntheticEvent} from "react";
 import RightPanel from "../utils/styledComponents/RightPanel";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../utils/redux/store";
 import {createSelector} from "@reduxjs/toolkit";
 import {Product} from "../utils/constants/constants";
+import {addNewCompany, removeExistingCompany} from "../utils/redux/userSelectionReducer";
 
-type CompaniesFilterProps = {
-    companiesProps: (e: string[]) => void
-}
+const CompanyFilter = () => {
 
-const CompanyFilter = (props: CompaniesFilterProps) => {
-
-    const {companiesProps} = props;
-    const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
-    const selectorArg = (state: RootState) => state.productsStore.responseData;
-    const selectorCombiner = (selector: Product[]) => {
-        return Array.from(
-            new Set(
-                selector.map((e) => {
-                    return e.company;
-                })
-            )
-        ).sort();
+    // Redux hooks
+    const dispatch = useDispatch();
+    const selectedCompaniesSelector = (state: RootState) => state.userSelectionStore.selectedCompanies;
+    const responseDataSelector = (state: RootState) => state.productsStore.responseData;
+    const selectorCombiner = (selectedCompaniesSelector: string[], responseDataSelector: Product[]) => {
+        return {
+            selectedCompaniesSelector: selectedCompaniesSelector,
+            responseDataSelector: Array.from(
+                new Set(
+                    responseDataSelector.map((e) => {
+                        return e.company;
+                    })
+                )
+            ).sort(),
+        };
     };
-    const combinedSelector = createSelector(selectorArg, selectorCombiner);
+    const combinedSelector = createSelector(selectedCompaniesSelector, responseDataSelector, selectorCombiner);
     const selector = useSelector(combinedSelector);
 
-    const appendNewCompany = (newCompany: string) => {
-        if (!selectedCompanies.includes(newCompany)) {
-            setSelectedCompanies(prev => {
-                const updatedCompanies = [...prev, newCompany];
-                companiesProps(updatedCompanies);
-                return updatedCompanies;
-            });
-        }
-    };
+    //Redux Simplified variable names
+    const companies = selector.selectedCompaniesSelector;
+    const responseData = selector.responseDataSelector;
 
-    const removeExistingCompany = (company: string) => {
-        let index = selectedCompanies.indexOf(company);
-        if (index !== -1) {
-            selectedCompanies.splice(index, 1);
-            setSelectedCompanies(prev => {
-                const updatedCompanies = [...prev];
-                companiesProps(updatedCompanies);
-                return updatedCompanies;
-            });
-        }
-    };
-
+    // Handlers
     const handleCompanyChange = (e: BaseSyntheticEvent) => {
         const state: boolean = e.target.checked;
         const value: string = e.target.value;
 
         if (state) {
-            appendNewCompany(value);
+            dispatch(addNewCompany(value));
         } else {
-            removeExistingCompany(value);
+            dispatch(removeExistingCompany(value));
         }
     }
 
+    // Styles
     const formGroupStyle = {
         border: "solid 1px #000",
         borderRadius: "5px",
@@ -72,14 +57,15 @@ const CompanyFilter = (props: CompaniesFilterProps) => {
         <RightPanel data-testid="right-panel">
             <FormGroup data-testid="form-group" sx={formGroupStyle}>
                 {
-                    selector.map((e: string, i: number) => (
+                    responseData.map((e: string, i: number) => (
                         <FormControlLabel
                             data-testid="form-control-label"
                             control={<Checkbox data-testid="checkbox"/>}
                             sx={{width: "200px"}}
                             onChange={handleCompanyChange}
-                            value={selector[i]}
-                            label={selector[i]}
+                            checked={companies.includes(e)}
+                            value={e}
+                            label={e}
                             key={i}
                         />
                     ))

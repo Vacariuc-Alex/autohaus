@@ -1,63 +1,114 @@
 import React from 'react';
-import {cleanup, fireEvent, render, screen} from '@testing-library/react';
+import {act, cleanup, fireEvent, render, screen, within} from '@testing-library/react';
 import BasicPagination from '../BasicPagination';
-
-//Globals
-const numberOfPages: number = 10;
-const handleCurrentPage = jest.fn();
+import {configureStore} from "@reduxjs/toolkit";
+import wishListReducer from "../../utils/redux/wishListReducer";
+import productsReducer from "../../utils/redux/productsReducer";
+import userSelectionReducer, {
+    resetCurrentPage,
+    resetNumberOfPages,
+    setCurrentPage,
+    setNumberOfPages
+} from "../../utils/redux/userSelectionReducer";
+import {initialState} from "../../utils/constants/testConstants";
+import {Provider} from "react-redux";
 
 //Test data
-const paginationItemsData = [[1, 1], [5, 5], [6, 10]];
+const paginationItemsData = [[1, 1], [2, 2], [3, 3]];
+
+// Mock store
+const mockStore = configureStore({
+    reducer: {
+        wishListStore: wishListReducer,
+        productsStore: productsReducer,
+        userSelectionStore: userSelectionReducer
+    },
+    preloadedState: initialState,
+});
+
+// Simplified redux variables
+const numberOfPages = mockStore.getState().userSelectionStore.numberOfPages;
 
 describe("BasicPagination component", () => {
     afterEach(() => {
+        act(() => {
+            mockStore.dispatch(resetCurrentPage());
+            mockStore.dispatch(resetNumberOfPages());
+        });
         cleanup();
     });
 
-    test("Should render BasicPagination correctly with required amount of elements", () => {
-        render(<BasicPagination numberOfPagesProp={numberOfPages} currentPageProp={handleCurrentPage}/>);
+    test("Should render BasicPagination", () => {
+        render(
+            <Provider store={mockStore}>
+                <BasicPagination/>
+            </Provider>
+        );
         const paginationStack = screen.getByTestId("pagination-stack");
-        const paginationComponent = screen.getByTestId("pagination-component");
-        const paginationItems = screen.getAllByTestId("pagination-item");
-        // <- 1 2 3 4 5 [...] 10 ->
-        const numberOfPaginationItems = numberOfPages - 2;
+        const paginationComponent = within(paginationStack).getByTestId("pagination-component");
+        const paginationItems = within(paginationComponent).getAllByTestId("pagination-item");
 
         expect(paginationStack).toBeInTheDocument();
         expect(paginationComponent).toBeInTheDocument();
-        expect(paginationItems.length).toBe(numberOfPaginationItems);
+        expect(paginationItems.length).toBe(numberOfPages + 2);
     });
 
     test.each(paginationItemsData)("Should select an element which represents page number when it is clicked", (
-        index, param) => {
-        render(<BasicPagination numberOfPagesProp={numberOfPages} currentPageProp={handleCurrentPage}/>);
-        const paginationItems = screen.getAllByTestId("pagination-item");
+        pageValue, pageIndex) => {
+        mockStore.dispatch(setNumberOfPages(3));
+        render(
+            <Provider store={mockStore}>
+                <BasicPagination/>
+            </Provider>
+        );
+        const paginationStack = screen.getByTestId("pagination-stack");
+        const paginationComponent = within(paginationStack).getByTestId("pagination-component");
+        const paginationItems = within(paginationComponent).getAllByTestId("pagination-item");
 
-        fireEvent.click(paginationItems[index]);
-        expect(handleCurrentPage).toHaveBeenCalledWith(param);
+        fireEvent.click(paginationItems[pageIndex]);
+        expect(paginationItems[pageIndex].textContent).toEqual(String(pageValue));
+        expect(mockStore.getState().userSelectionStore.currentPage).toEqual(pageValue);
     });
 
     test("Should select next page element when forward arrow is clicked " +
         "and then previous page element when back arrow is clicked", () => {
-        render(<BasicPagination numberOfPagesProp={numberOfPages} currentPageProp={handleCurrentPage}/>);
-
+        mockStore.dispatch(setNumberOfPages(3));
+        render(
+            <Provider store={mockStore}>
+                <BasicPagination/>
+            </Provider>
+        );
         const arrowForwardIcon = screen.getByTestId("arrow-forward-icon");
         fireEvent.click(arrowForwardIcon);
-        expect(handleCurrentPage).toHaveBeenCalledWith(2);
+        expect(mockStore.getState().userSelectionStore.currentPage).toEqual(2);
 
         const arrowBackIcon = screen.getByTestId("arrow-back-icon");
         fireEvent.click(arrowBackIcon);
-        expect(handleCurrentPage).toHaveBeenCalledWith(1);
+        expect(mockStore.getState().userSelectionStore.currentPage).toEqual(1);
     });
 
     test("Should not select next or previous pages if numberOfPages is smaller than the currentPage", () => {
-        render(<BasicPagination numberOfPagesProp={1} currentPageProp={handleCurrentPage}/>);
-
+        render(
+            <Provider store={mockStore}>
+                <BasicPagination/>
+            </Provider>
+        );
         const arrowForwardIcon = screen.getByTestId("arrow-forward-icon");
         fireEvent.click(arrowForwardIcon);
-        expect(handleCurrentPage).not.toHaveBeenCalled();
+        expect(mockStore.getState().userSelectionStore.currentPage).toEqual(1);
 
         const arrowBackIcon = screen.getByTestId("arrow-back-icon");
         fireEvent.click(arrowBackIcon);
-        expect(handleCurrentPage).not.toHaveBeenCalled();
+        expect(mockStore.getState().userSelectionStore.currentPage).toEqual(1);
+    });
+
+    test("Should reset currentPage when numberOfPages is larger than numberOfPages", () => {
+        mockStore.dispatch(setCurrentPage(999));
+        render(
+            <Provider store={mockStore}>
+                <BasicPagination/>
+            </Provider>
+        );
+        expect(mockStore.getState().userSelectionStore.currentPage).toEqual(1);
     });
 });

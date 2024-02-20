@@ -7,14 +7,16 @@ import wishListReducer, {addItem, removeItem} from "../../utils/redux/wishListRe
 import productsReducer from "../../utils/redux/productsReducer";
 import {configureStore} from "@reduxjs/toolkit";
 import {initialState} from "../../utils/constants/testConstants";
+import userSelectionReducer from "../../utils/redux/userSelectionReducer";
 
 //Mock store
 const mockStore = configureStore({
     reducer: {
         wishListStore: wishListReducer,
-        productsStore: productsReducer
+        productsStore: productsReducer,
+        userSelectionStore: userSelectionReducer
     },
-    preloadedState: initialState
+    preloadedState: initialState,
 });
 
 //Mock useNavigate
