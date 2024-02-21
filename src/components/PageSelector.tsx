@@ -36,8 +36,8 @@ const PageSelector: React.FC<PageSelectorProps> = ({onElementsPerPageChangeProp}
                     onChange={handleSelectChange}
                 >
                     {
-                        elementsPerPageRange.map((e) => (
-                            <MenuItem data-testid="menu-item" value={e}>{e}</MenuItem>
+                        elementsPerPageRange.map((e, i) => (
+                            <MenuItem data-testid="menu-item" value={e} key={i}>{e}</MenuItem>
                         ))
                     }
                 </Select>

@@ -15,7 +15,7 @@ type InfoCardProps = {
 const InfoCard = (props: InfoCardProps) => {
     const {productProps}  = props;
     const product: Product = JSON.parse(JSON.stringify(productProps));
-    const {id, company, model, year, vin, color, price} = product;
+    const {id, company, model, year, vin, color, price, image} = product;
 
     const [favouriteAreaVisibility, setFavouriteAreaVisibility] = useState({opacity: "0", transition: ""});
     const dispatch = useDispatch();
@@ -25,6 +25,7 @@ const InfoCard = (props: InfoCardProps) => {
     });
 
     const isProductFavourite = selector.includes(id);
+    const imageSource = image ? image : autoImg;
 
     const toggleFavouriteAreaVisibility = (opacity: string) => {
         setFavouriteAreaVisibility({opacity: opacity, transition: "opacity 0.3s ease"});
@@ -72,12 +73,12 @@ const InfoCard = (props: InfoCardProps) => {
                 <CardMedia
                     data-testid="card-media"
                     component="img"
-                    height="140"
-                    image={autoImg}
+                    height="280"
+                    image={imageSource}
                     alt="autoImg"
                 />
                 <CardContent data-testid="card-content">
-                    <Typography data-testid="typography" gutterBottom variant="subtitle1" sx={{fontSize: "14px", color: "#ff0000"}}>
+                    <Typography data-testid="typography" gutterBottom variant="subtitle1" sx={{fontSize: "14px", color: "#2d1e9b"}}>
                         {company} {model}, {color}, {year}
                     </Typography>
                     <Typography data-testid="typography" sx={{fontSize: "14px", fontWeight: "bold"}}>

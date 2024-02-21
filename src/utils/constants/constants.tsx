@@ -6,5 +6,6 @@ export type Product = {
     vin: string,
     color: string,
     price: number,
+    image?: string
     isFavourite?: boolean
 };
