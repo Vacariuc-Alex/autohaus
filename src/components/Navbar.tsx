@@ -19,11 +19,19 @@ function ResponsiveAppBar() {
     }
 
     return (
-        <AppBar position="fixed" sx={{backgroundColor: "#2e8b5a"}}>
-            <Container maxWidth="xl" sx={{padding: {xs: 0, sm: 0, md: 0, lg: 0, xl: 0}, marginLeft: "105px"}}>
-                <Toolbar disableGutters>
-                    <FaCar style={{display: 'flex', marginRight: 30, transform: "scale(1.5)"}}/>
+        <AppBar data-testid="app-bar" position="fixed" sx={{backgroundColor: "#2e8b5a"}}>
+            <Container
+                data-testid="container"
+                maxWidth="xl"
+                sx={{padding: {xs: 0, sm: 0, md: 0, lg: 0, xl: 0}, marginLeft: "105px"}}
+            >
+                <Toolbar data-testid="toolbar" disableGutters>
+                    <FaCar
+                        data-testid="fa-car-icon"
+                        style={{display: 'flex', marginRight: 30, transform: "scale(1.5)"}}
+                    />
                     <Typography
+                        data-testid="typography"
                         variant="h6"
                         noWrap
                         component="a"
@@ -41,9 +49,10 @@ function ResponsiveAppBar() {
                     >
                         Autohaus
                     </Typography>
-                    <Box sx={{flexGrow: 1, display: 'flex'}}>
+                    <Box data-testid="box" sx={{flexGrow: 1, display: 'flex'}}>
                         {pages.map((page) => (
                             <Button
+                                data-testid="button"
                                 key={page}
                                 sx={{
                                     margin: 2,

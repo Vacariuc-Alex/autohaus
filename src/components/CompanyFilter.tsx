@@ -15,10 +15,10 @@ const CompanyFilter = (props: CompaniesFilterProps) => {
     const {companiesProps} = props;
     const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
     const selectorArg = (state: RootState) => state.productsStore.responseData;
-    const selectorCombiner = (xSelector: Product[]) => {
+    const selectorCombiner = (selector: Product[]) => {
         return Array.from(
             new Set(
-                xSelector.map((e) => {
+                selector.map((e) => {
                     return e.company;
                 })
             )
@@ -69,16 +69,19 @@ const CompanyFilter = (props: CompaniesFilterProps) => {
     };
 
     return (
-        <RightPanel>
-            <FormGroup sx={formGroupStyle}>
+        <RightPanel data-testid="right-panel">
+            <FormGroup data-testid="form-group" sx={formGroupStyle}>
                 {
                     selector.map((e: string, i: number) => (
-                        <FormControlLabel control={<Checkbox/>}
-                                          sx={{width: "200px"}}
-                                          onChange={handleCompanyChange}
-                                          value={selector[i]}
-                                          label={selector[i]}
-                                          key={i}/>
+                        <FormControlLabel
+                            data-testid="form-control-label"
+                            control={<Checkbox data-testid="checkbox"/>}
+                            sx={{width: "200px"}}
+                            onChange={handleCompanyChange}
+                            value={selector[i]}
+                            label={selector[i]}
+                            key={i}
+                        />
                     ))
                 }
             </FormGroup>

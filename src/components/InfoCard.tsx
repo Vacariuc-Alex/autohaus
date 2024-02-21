@@ -58,29 +58,32 @@ const InfoCard = (props: InfoCardProps) => {
     }
 
     return (
-        <Card sx={{width: 300}} onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
-            <CardActionArea>
-                <FavouriteArea style={favouriteAreaVisibility}>
-                    <Checkbox sx={{bottom: 25, padding: 0}}
-                              icon={<IoIosHeartEmpty/>}
-                              checkedIcon={<IoIosHeart/>}
-                              checked={isProductFavourite}
-                              onChange={handleFavouriteItemWasSelected}/>
+        <Card data-testid="card" sx={{width: 300}} onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
+            <CardActionArea data-testid="card-action-area" >
+                <FavouriteArea data-testid="favourite-area" style={favouriteAreaVisibility}>
+                    <Checkbox
+                        data-testid="checkbox"
+                        sx={{bottom: 25, padding: 0}}
+                        icon={<IoIosHeartEmpty data-testid="io-ios-heart-empty"/>}
+                        checkedIcon={<IoIosHeart data-testid="io-ios-heart"/>}
+                        checked={isProductFavourite}
+                        onChange={handleFavouriteItemWasSelected}/>
                 </FavouriteArea>
                 <CardMedia
+                    data-testid="card-media"
                     component="img"
                     height="140"
                     image={autoImg}
                     alt="autoImg"
                 />
-                <CardContent>
-                    <Typography gutterBottom variant="subtitle1" sx={{fontSize: "14px", color: "#ff0000"}}>
+                <CardContent data-testid="card-content">
+                    <Typography data-testid="typography" gutterBottom variant="subtitle1" sx={{fontSize: "14px", color: "#ff0000"}}>
                         {company} {model}, {color}, {year}
                     </Typography>
-                    <Typography sx={{fontSize: "14px", fontWeight: "bold"}}>
+                    <Typography data-testid="typography" sx={{fontSize: "14px", fontWeight: "bold"}}>
                         {price} $
                     </Typography>
-                    <Typography sx={{fontSize: '12px', paddingTop: '8px', opacity: "50%"}}>
+                    <Typography data-testid="typography" sx={{fontSize: '12px', paddingTop: '8px', opacity: "50%"}}>
                         {vin}
                     </Typography>
                 </CardContent>

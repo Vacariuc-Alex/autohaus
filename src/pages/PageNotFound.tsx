@@ -16,14 +16,20 @@ const PageNotFound = () => {
     return (
         <>
             <Navbar/>
-            <NotFoundContainer style={animationProps}>
-                <Typography sx={{fontSize: "100px", color: "#c71919", letterSpacing: '.2rem', fontWeight: 700}}>
+            <NotFoundContainer data-testid="not-found-container" style={animationProps}>
+                <Typography
+                    data-testid="typography"
+                    sx={{fontSize: "100px", color: "#c71919", letterSpacing: '.2rem', fontWeight: 700}}
+                >
                     404
                 </Typography>
-                <Typography sx={{fontSize: "20px", fontWeight: "bolder", marginBottom: "10px"}}>
+                <Typography
+                    data-testid="typography"
+                    sx={{fontSize: "20px", fontWeight: "bolder", marginBottom: "10px"}}
+                >
                     Page Not Found!
                 </Typography>
-                <Typography sx={{fontSize: "20px"}}>
+                <Typography data-testid="typography" sx={{fontSize: "20px"}}>
                     Sorry, the page you're looking for does not exist!
                 </Typography>
                 <img src={pageNotFoundImage} style={{width: 120, marginTop: 20}} alt="Not found!"/>
