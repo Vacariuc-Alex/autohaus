@@ -11,21 +11,36 @@ import {fetchDataRequest} from "../utils/redux/productsReducer";
 import {RootState} from "../utils/redux/store";
 import {Product} from "../utils/constants/constants";
 import Loading from "../components/Loading";
+import ItemNotFound from "../components/ItemNotFound";
+import {createSelector} from "@reduxjs/toolkit";
+import {setNumberOfPages} from "../utils/redux/userSelectionReducer";
 
 const Home = () => {
 
+    // Redux hooks
     const dispatch = useDispatch();
-    const selector = useSelector((state: RootState) => {
-        return state.productsStore;
-    });
-    const [products, setProducts] = useState<Product[]>([]);
-    const [companies, setCompanies] = useState<string[]>([]);
-    const [elementsPerPage, setElementsPerPage] = useState<number>(10);
-    const [numberOfPages, setNumberOfPages] = useState<number>(0);
-    const [currentPage, setCurrentPage] = useState<number>(1);
+    const productsStoreSelector = (state: RootState) => state.productsStore;
+    const userSelectionStoreSelector = (state: RootState) => state.userSelectionStore;
+    const selectorCombiner = (productsStoreSelector: any, userSelectionStoreSelector: any) => {
+        return {productsStoreSelector, userSelectionStoreSelector}
+    }
+    const combinedSelector = createSelector(productsStoreSelector, userSelectionStoreSelector, selectorCombiner);
+    const selector = useSelector(combinedSelector);
 
-    const {responseData, error, loading, isRequestExecuted} = selector;
+    //Redux Simplified variable names
+    const companies = selector.userSelectionStoreSelector.selectedCompanies;
+    const currentPage = selector.userSelectionStoreSelector.currentPage;
+    const elementsPerPage = selector.userSelectionStoreSelector.elementsPerPage;
 
+    //useState hooks
+    const [products, setProducts] = useState<Product[]>([]); //Products to be displayed
+    const [searchedProducts, setSearchedProducts] = useState<Product[]>([]); // Products that were found by searchbar text
+    const [isHomePageLoaded, setIsHomePageLoaded] = useState<boolean>(false); //This variable is used for verifying that all other states are loaded correctly (only for Home page)
+
+    //Saga destructor
+    const {responseData, error, loading, isRequestExecuted} = selector.productsStoreSelector;
+
+    //useEffect helpers
     const filterProductsByCompanies = (responseData: Product[], companies: string[]) => {
         return companies.length !== 0
             ? responseData.filter((e: Product) => companies.includes(e.company))
@@ -41,48 +56,42 @@ const Home = () => {
     };
 
     const displayElements = () => {
-        let sortedProducts: Product[] = filterProductsByCompanies(responseData, companies);
+        let sortedProducts: Product[] = filterProductsByCompanies(searchedProducts, companies);
         const calculatedPages = calculateNumberOfPages(sortedProducts, elementsPerPage);
         let pagedProducts: Product[][] = [];
 
-        setNumberOfPages(calculatedPages);
+        dispatch(setNumberOfPages(calculatedPages));
         for (let i = 0; i < calculatedPages; i++) {
             pagedProducts[i] = [];
             for (let j = 0; limitSortedProducts(i, j, sortedProducts, elementsPerPage); j++) {
                 pagedProducts[i][j] = sortedProducts[i * elementsPerPage + j];
             }
         }
-
-        // Ensures that the products will be set only after all variables are loaded
-        setProducts((prev) => {
-            return pagedProducts.length !== 0 ? pagedProducts[currentPage - 1] : prev;
-        });
+        setProducts(pagedProducts[currentPage - 1]);
     }
 
+    //useEffects
     useEffect(() => {
-        displayElements();
-    }, [companies, currentPage, elementsPerPage, responseData]);
+        // By default, searchedProducts contains all fetched products
+        if (searchedProducts.length !== 0) {
+            setIsHomePageLoaded(true);
+            displayElements();
+        }
+    }, [companies, currentPage, elementsPerPage, responseData, searchedProducts]);
 
     useEffect(() => {
+        //To avoid fetching each time useNavigate is triggered
         if (!isRequestExecuted) {
             dispatch(fetchDataRequest());
         }
     }, [isRequestExecuted]);
 
-    const handleElementsPerPageChange = (e: number) => {
-        setCurrentPage(1);
-        setElementsPerPage(e);
-    };
-
-    const handleCurrentPage = (e: number) => {
-        setCurrentPage(e);
-    };
-
-    const handleCompanies = (e: string[]) => {
-        setCurrentPage(1);
-        setCompanies(e);
+    // Callback for searcbox in navbar
+    const handleResultingData = (e: Product[]) => {
+        setSearchedProducts(e);
     }
 
+    //Pre-executed render block
     if (error) {
         return (
             <h1 data-testid="error">Error: {error}</h1>
@@ -93,25 +102,41 @@ const Home = () => {
         );
     }
 
+    //Render
+    const renderProductListOrNotFound = (() => {
+        if (products?.length && searchedProducts?.length) {
+            return products.map((e, i) => (
+                <InfoCard data-testid="card" productProps={e} key={i}/>
+            ));
+        } else if (isHomePageLoaded) {
+            return (
+                <ItemNotFound/>
+            );
+        }
+    })();
+
+    const renderPagination = (() => {
+        if (products?.length && searchedProducts?.length !== 0 && isHomePageLoaded) {
+            return (
+                <>
+                    <PageSelector data-testid="box-component"/>
+                    <BasicPagination data-testid="pagination-stack"/>
+                </>
+            );
+        }
+    })();
+
+
     return (
         <>
-            <Navbar data-testid="app-bar"/>
+            <Navbar data-testid="app-bar" initialData={responseData} resultingData={handleResultingData}/>
             <Flex data-testid="flex">
                 <ContentCanvas data-testid="content-canvas">
-                    {
-                        products.map((e, i) => (
-                            <InfoCard data-testid="card" productProps={e} key={i}/>
-                        ))
-                    }
+                    {renderProductListOrNotFound}
                 </ContentCanvas>
-                <CompanyFilter data-testid="right-panel" companiesProps={handleCompanies}/>
+                <CompanyFilter data-testid="right-panel"/>
             </Flex>
-            <PageSelector data-testid="box-component" onElementsPerPageChangeProp={handleElementsPerPageChange}/>
-            <BasicPagination
-                data-testid="pagination-stack"
-                numberOfPagesProp={numberOfPages}
-                currentPageProp={handleCurrentPage}
-            />
+            {renderPagination}
         </>
     );
 }

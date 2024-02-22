@@ -1,14 +1,14 @@
 import {cleanup, render, screen} from "@testing-library/react";
-import NoItems from "../NoItems";
 import React from "react";
+import NoFavouriteItems from "../NoFavouriteItems";
 
 describe("NoItems component", () => {
     afterEach(() => {
         cleanup();
     });
 
-    test("Should render NoItems component", () => {
-        render(<NoItems/>);
+    test("Should render NoFavouriteItems component", () => {
+        render(<NoFavouriteItems/>);
         const noItemContainer = screen.getByTestId("no-item-container");
         const imgContainer = screen.getByTestId("img-container");
         const typographyHeadingContainer = screen.getByTestId("typography-heading-container");

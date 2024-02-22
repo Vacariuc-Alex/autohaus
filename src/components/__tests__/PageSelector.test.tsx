@@ -1,10 +1,25 @@
 import {cleanup, fireEvent, render, screen, within} from '@testing-library/react';
 import PageSelector from "../PageSelector";
 import React from "react";
+import {configureStore} from "@reduxjs/toolkit";
+import wishListReducer from "../../utils/redux/wishListReducer";
+import userSelectionReducer from "../../utils/redux/userSelectionReducer";
+import productsReducer from "../../utils/redux/productsReducer";
+import {initialState} from "../../utils/constants/testConstants";
+import {Provider} from "react-redux";
 
 //Globals
-const elementsPerPageHandler = jest.fn();
 const elementsPerPage = ["10", "20", "50", "100", "200", "500", "1000"];
+
+// Mock store
+const mockStore = configureStore({
+    reducer: {
+        wishListStore: wishListReducer,
+        productsStore: productsReducer,
+        userSelectionStore: userSelectionReducer,
+    },
+    preloadedState: initialState,
+});
 
 describe("PageSelector component", () => {
     afterEach(() => {
@@ -12,7 +27,11 @@ describe("PageSelector component", () => {
     });
 
     test("Should render PageSelector component", () => {
-        render(<PageSelector onElementsPerPageChangeProp={elementsPerPageHandler}/>);
+        render(
+            <Provider store={mockStore}>
+                <PageSelector/>
+            </Provider>
+        );
         const boxComponent = screen.getByTestId("box-component");
         const formControl = screen.getByTestId("form-control");
         const inputLabel = screen.getByTestId("input-label");
@@ -27,8 +46,11 @@ describe("PageSelector component", () => {
     });
 
     test("Should display elements per page options when label is clicked and select second element with value 20", () => {
-        render(<PageSelector onElementsPerPageChangeProp={elementsPerPageHandler}/>);
-
+        render(
+            <Provider store={mockStore}>
+                <PageSelector/>
+            </Provider>
+        );
         const selectComponent = screen.getByTestId("select-component");
         const button = within(selectComponent).getByRole("combobox");
         fireEvent.mouseDown(button);
@@ -42,6 +64,6 @@ describe("PageSelector component", () => {
         });
 
         fireEvent.click(menuItems[1]);
-        expect(elementsPerPageHandler).toHaveBeenCalledWith(20);
+        expect(mockStore.getState().userSelectionStore.elementsPerPage).toBe(20);
     });
 });

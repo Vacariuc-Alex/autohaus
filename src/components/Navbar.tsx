@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {BaseSyntheticEvent, useEffect, useState} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,16 +7,54 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import {FaCar} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
+import SearchIcon from '@mui/icons-material/Search';
+import {SearchIconWrapper} from "../utils/styledComponents/search/SearchIconWrapper";
+import {StyledInputBase} from "../utils/styledComponents/search/SearchInputBase";
+import {Search} from '../utils/styledComponents/search/Search';
+import {Product} from "../utils/constants/constants";
 
-const pages = ['Home', 'News', 'Wishlist'];
+type NavbarProps = {
+    initialData?: Product[];
+    resultingData?: (e: Product[]) => void;
+} | {
+    initialData: Product[];
+    resultingData: (e: Product[]) => void;
+}
 
-function ResponsiveAppBar() {
+const pages = ["Home", "News", "Wishlist"];
+
+const ResponsiveAppBar = (props: NavbarProps) => {
+
+    const {initialData, resultingData} = props;
 
     const navigate = useNavigate();
+    const [searchingText, setSearchingText] = useState<string>("");
+
+    const searchAndFilterProducts = () => {
+        if (!initialData) return;
+
+        const foundProducts = initialData.filter((e: Product) => {
+            const productsSearchableText = `${e.company} ${e.model} ${e.color}`;
+            const pattern = new RegExp(`.*${searchingText}.*`, "i");
+            return pattern.test(productsSearchableText);
+        });
+
+        if (resultingData) {
+            resultingData(foundProducts);
+        }
+    }
 
     const handleOnClick = (page: string) => {
         navigate(`/${page.toLowerCase()}`);
     }
+
+    const handleSearchTextChange = (e: BaseSyntheticEvent) => {
+        setSearchingText(e.target.value);
+    }
+
+    useEffect(() => {
+        searchAndFilterProducts();
+    }, [searchingText]);
 
     return (
         <AppBar data-testid="app-bar" position="fixed" sx={{backgroundColor: "#2e8b5a"}}>
@@ -70,6 +108,17 @@ function ResponsiveAppBar() {
                             </Button>
                         ))}
                     </Box>
+                    {initialData && resultingData &&
+                        <Search data-testid="search">
+                            <SearchIconWrapper data-testid="search-icon-wrapper">
+                                <SearchIcon data-testid="search-icon" sx={{color: "#242a2e"}}/>
+                            </SearchIconWrapper>
+                            <StyledInputBase
+                                data-testid="styled-input-base"
+                                placeholder="Search…"
+                                onChange={handleSearchTextChange}/>
+                        </Search>
+                    }
                 </Toolbar>
             </Container>
         </AppBar>

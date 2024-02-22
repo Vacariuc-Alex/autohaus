@@ -6,7 +6,7 @@ import ContentCanvas from "../utils/styledComponents/ContentCanvas";
 import {Product} from "../utils/constants/constants";
 import InfoCard from "../components/InfoCard";
 import {createSelector} from "@reduxjs/toolkit";
-import NoItems from "../components/NoItems";
+import NoFavouriteItems from "../components/NoFavouriteItems";
 
 const Wishlist = () => {
 
@@ -33,7 +33,7 @@ const Wishlist = () => {
                     ? selector.wishListIds.map((e, i) => (
                         <InfoCard data-testid="card" productProps={getElement(e)} key={i}/>
                     ))
-                    : <NoItems data-testid="no-item-container"/>
+                    : <NoFavouriteItems data-testid="no-item-container"/>
                 }
             </ContentCanvas>
         </>

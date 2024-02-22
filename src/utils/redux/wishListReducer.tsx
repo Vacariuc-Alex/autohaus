@@ -1,10 +1,10 @@
-import {createSlice} from '@reduxjs/toolkit'
+import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
-export type WishListReducer = {
-    ids: number[]
+type DataState = {
+    ids: number[];
 }
 
-const initialState: WishListReducer = {
+const initialState: DataState = {
     ids: [],
 }
 
@@ -12,12 +12,12 @@ export const wishListSlice = createSlice({
     name: 'wishListSlice',
     initialState,
     reducers: {
-        addItem: (state, action) => {
+        addItem: (state: DataState, action: PayloadAction<number>) => {
             if (!state.ids.includes(action.payload)) {
                 state.ids.push(action.payload);
             }
         },
-        removeItem: (state, action) => {
+        removeItem: (state: DataState, action: PayloadAction<number>) => {
             const index = state.ids.findIndex((e) => e === action.payload);
             if (index !== -1) {
                 state.ids.splice(index, 1);
@@ -26,5 +26,8 @@ export const wishListSlice = createSlice({
     }
 });
 
-export const {addItem, removeItem} = wishListSlice.actions;
+export const {
+    addItem,
+    removeItem
+} = wishListSlice.actions;
 export default wishListSlice.reducer;

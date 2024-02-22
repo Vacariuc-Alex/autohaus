@@ -13,7 +13,7 @@ type InfoCardProps = {
 };
 
 const InfoCard = (props: InfoCardProps) => {
-    const {productProps}  = props;
+    const {productProps} = props;
     const product: Product = JSON.parse(JSON.stringify(productProps));
     const {id, company, model, year, vin, color, price, image} = product;
 

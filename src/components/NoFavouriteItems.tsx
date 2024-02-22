@@ -4,7 +4,7 @@ import sadHeart from "../assets/img/SadHeart.png"
 import {useSpring} from "react-spring";
 import {NoItemContainer} from "../utils/styledComponents/NoItemsContainer";
 
-const NoItems = () => {
+const NoFavouriteItems = () => {
 
     const animationProps = useSpring({
         from: {opacity: 0},
@@ -29,4 +29,4 @@ const NoItems = () => {
     );
 }
 
-export default NoItems;
+export default NoFavouriteItems;
