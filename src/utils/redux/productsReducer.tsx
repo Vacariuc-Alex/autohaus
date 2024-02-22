@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {Product} from "../constants/constants";
+import {Product} from "src/utils/constants/constants";
 
 type DataState = {
     responseData: Product[];

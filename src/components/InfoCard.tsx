@@ -1,12 +1,23 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {Card, CardActionArea, CardContent, CardMedia, Checkbox, Typography,} from "@mui/material";
-import autoImg from "../assets/img/Auto.jpg";
-import {addItem, removeItem} from "../utils/redux/wishListReducer";
+import autoImg from "src/assets/img/Auto.jpg";
+import {addItem, removeItem} from "src/utils/redux/wishListReducer";
 import {useDispatch, useSelector} from "react-redux"
-import FavouriteArea from "../utils/styledComponents/FavouriteArea";
+import FavouriteArea from "src/utils/styledComponents/FavouriteArea";
 import {IoIosHeart, IoIosHeartEmpty} from "react-icons/io";
-import {Product} from "../utils/constants/constants";
-import {RootState} from "../utils/redux/store";
+import {Product} from "src/utils/constants/constants";
+import {RootState} from "src/utils/redux/store";
+import {
+    CARD,
+    CARD_ACTION_AREA,
+    CARD_CONTENT,
+    CARD_MEDIA,
+    CHECKBOX,
+    FAVOURITE_AREA,
+    IO_IOS_HEART,
+    IO_IOS_HEART_EMPTY,
+    TYPOGRAPHY
+} from "src/utils/constants/dataTestIds";
 
 type InfoCardProps = {
     productProps: Product
@@ -59,32 +70,33 @@ const InfoCard = (props: InfoCardProps) => {
     }
 
     return (
-        <Card data-testid="card" sx={{width: 300}} onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
-            <CardActionArea data-testid="card-action-area" >
-                <FavouriteArea data-testid="favourite-area" style={favouriteAreaVisibility}>
+        <Card data-testid={CARD} sx={{width: 300}} onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
+            <CardActionArea data-testid={CARD_ACTION_AREA}>
+                <FavouriteArea data-testid={FAVOURITE_AREA} style={favouriteAreaVisibility}>
                     <Checkbox
-                        data-testid="checkbox"
+                        data-testid={CHECKBOX}
                         sx={{bottom: 25, padding: 0}}
-                        icon={<IoIosHeartEmpty data-testid="io-ios-heart-empty"/>}
-                        checkedIcon={<IoIosHeart data-testid="io-ios-heart"/>}
+                        icon={<IoIosHeartEmpty data-testid={IO_IOS_HEART_EMPTY}/>}
+                        checkedIcon={<IoIosHeart data-testid={IO_IOS_HEART}/>}
                         checked={isProductFavourite}
                         onChange={handleFavouriteItemWasSelected}/>
                 </FavouriteArea>
                 <CardMedia
-                    data-testid="card-media"
+                    data-testid={CARD_MEDIA}
                     component="img"
                     height="280"
                     image={imageSource}
                     alt="autoImg"
                 />
-                <CardContent data-testid="card-content">
-                    <Typography data-testid="typography" gutterBottom variant="subtitle1" sx={{fontSize: "14px", color: "#2d1e9b"}}>
+                <CardContent data-testid={CARD_CONTENT}>
+                    <Typography data-testid={TYPOGRAPHY} gutterBottom variant="subtitle1"
+                                sx={{fontSize: "14px", color: "#2d1e9b"}}>
                         {company} {model}, {color}, {year}
                     </Typography>
-                    <Typography data-testid="typography" sx={{fontSize: "14px", fontWeight: "bold"}}>
+                    <Typography data-testid={TYPOGRAPHY} sx={{fontSize: "14px", fontWeight: "bold"}}>
                         {price} $
                     </Typography>
-                    <Typography data-testid="typography" sx={{fontSize: '12px', paddingTop: '8px', opacity: "50%"}}>
+                    <Typography data-testid={TYPOGRAPHY} sx={{fontSize: "12px", paddingTop: "8px", opacity: "50%"}}>
                         {vin}
                     </Typography>
                 </CardContent>

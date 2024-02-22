@@ -1,16 +1,16 @@
-import {useEffect, useState} from 'react';
-import axios, {AxiosResponse} from 'axios';
+import {useEffect, useState} from "react";
+import axios, {AxiosResponse} from "axios";
 
-axios.defaults.baseURL = 'http://localhost:3001';
+axios.defaults.baseURL = "http://localhost:3001";
 
 type Axios = {
     url: string,
-    method: 'get' | 'post' | 'put' | 'patch' | 'delete'
+    method: "get" | "post" | "put" | "patch" | "delete"
 }
 
 const useAxios = ({url, method}: Axios) => {
     const [response, setResponse] = useState<AxiosResponse<any, any> | null>(null);
-    const [error, setError] = useState('');
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
 
     const fetchData = () => {

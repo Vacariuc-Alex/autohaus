@@ -1,11 +1,12 @@
 import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
 import React, {BaseSyntheticEvent} from "react";
-import RightPanel from "../utils/styledComponents/RightPanel";
+import RightPanel from "src/utils/styledComponents/RightPanel";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../utils/redux/store";
+import {RootState} from "src/utils/redux/store";
 import {createSelector} from "@reduxjs/toolkit";
-import {Product} from "../utils/constants/constants";
-import {addNewCompany, removeExistingCompany} from "../utils/redux/userSelectionReducer";
+import {Product} from "src/utils/constants/constants";
+import {addNewCompany, removeExistingCompany} from "src/utils/redux/userSelectionReducer";
+import {CHECKBOX, FORM_CONTROL_LABEL, FORM_GROUP, RIGHT_PANEL} from "src/utils/constants/dataTestIds";
 
 const CompanyFilter = () => {
 
@@ -54,13 +55,13 @@ const CompanyFilter = () => {
     };
 
     return (
-        <RightPanel data-testid="right-panel">
-            <FormGroup data-testid="form-group" sx={formGroupStyle}>
+        <RightPanel data-testid={RIGHT_PANEL}>
+            <FormGroup data-testid={FORM_GROUP} sx={formGroupStyle}>
                 {
                     responseData.map((e: string, i: number) => (
                         <FormControlLabel
-                            data-testid="form-control-label"
-                            control={<Checkbox data-testid="checkbox"/>}
+                            data-testid={FORM_CONTROL_LABEL}
+                            control={<Checkbox data-testid={CHECKBOX}/>}
                             sx={{width: "200px"}}
                             onChange={handleCompanyChange}
                             checked={companies.includes(e)}

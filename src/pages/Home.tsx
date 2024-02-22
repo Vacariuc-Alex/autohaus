@@ -1,19 +1,30 @@
 import {useEffect, useState} from "react";
-import CompanyFilter from "../components/CompanyFilter";
-import InfoCard from "../components/InfoCard";
-import ContentCanvas from "../utils/styledComponents/ContentCanvas";
-import Flex from "../utils/styledComponents/Flex";
-import PageSelector from "../components/PageSelector";
-import BasicPagination from "../components/BasicPagination";
-import Navbar from "../components/Navbar";
+import CompanyFilter from "src/components/CompanyFilter";
+import InfoCard from "src/components/InfoCard";
+import ContentCanvas from "src/utils/styledComponents/ContentCanvas";
+import Flex from "src/utils/styledComponents/Flex";
+import PageSelector from "src/components/PageSelector";
+import BasicPagination from "src/components/BasicPagination";
+import Navbar from "src/components/Navbar";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchDataRequest} from "../utils/redux/productsReducer";
-import {RootState} from "../utils/redux/store";
-import {Product} from "../utils/constants/constants";
-import Loading from "../components/Loading";
-import ItemNotFound from "../components/ItemNotFound";
+import {fetchDataRequest} from "src/utils/redux/productsReducer";
+import {RootState} from "src/utils/redux/store";
+import {Product} from "src/utils/constants/constants";
+import Loading from "src/components/Loading";
+import ItemNotFound from "src/components/ItemNotFound";
 import {createSelector} from "@reduxjs/toolkit";
-import {setNumberOfPages} from "../utils/redux/userSelectionReducer";
+import {setNumberOfPages} from "src/utils/redux/userSelectionReducer";
+import {
+    APP_BAR,
+    BOX,
+    BOX_COMPONENT,
+    CARD,
+    CONTENT_CANVAS,
+    ERROR,
+    FLEX,
+    PAGINATION_STACK,
+    RIGHT_PANEL
+} from "src/utils/constants/dataTestIds";
 
 const Home = () => {
 
@@ -86,7 +97,7 @@ const Home = () => {
         }
     }, [isRequestExecuted]);
 
-    // Callback for searcbox in navbar
+    // Callback for searchbar in navbar
     const handleResultingData = (e: Product[]) => {
         setSearchedProducts(e);
     }
@@ -94,11 +105,11 @@ const Home = () => {
     //Pre-executed render block
     if (error) {
         return (
-            <h1 data-testid="error">Error: {error}</h1>
+            <h1 data-testid={ERROR}>Error: {error}</h1>
         );
     } else if (loading) {
         return (
-            <Loading data-testid="box"/>
+            <Loading data-testid={BOX}/>
         );
     }
 
@@ -106,7 +117,7 @@ const Home = () => {
     const renderProductListOrNotFound = (() => {
         if (products?.length && searchedProducts?.length) {
             return products.map((e, i) => (
-                <InfoCard data-testid="card" productProps={e} key={i}/>
+                <InfoCard data-testid={CARD} productProps={e} key={i}/>
             ));
         } else if (isHomePageLoaded) {
             return (
@@ -119,8 +130,8 @@ const Home = () => {
         if (products?.length && searchedProducts?.length !== 0 && isHomePageLoaded) {
             return (
                 <>
-                    <PageSelector data-testid="box-component"/>
-                    <BasicPagination data-testid="pagination-stack"/>
+                    <PageSelector data-testid={BOX_COMPONENT}/>
+                    <BasicPagination data-testid={PAGINATION_STACK}/>
                 </>
             );
         }
@@ -129,12 +140,12 @@ const Home = () => {
 
     return (
         <>
-            <Navbar data-testid="app-bar" initialData={responseData} resultingData={handleResultingData}/>
-            <Flex data-testid="flex">
-                <ContentCanvas data-testid="content-canvas">
+            <Navbar data-testid={APP_BAR} initialData={responseData} resultingData={handleResultingData}/>
+            <Flex data-testid={FLEX}>
+                <ContentCanvas data-testid={CONTENT_CANVAS}>
                     {renderProductListOrNotFound}
                 </ContentCanvas>
-                <CompanyFilter data-testid="right-panel"/>
+                <CompanyFilter data-testid={RIGHT_PANEL}/>
             </Flex>
             {renderPagination}
         </>

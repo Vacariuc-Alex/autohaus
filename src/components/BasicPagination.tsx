@@ -1,12 +1,19 @@
-import React, {BaseSyntheticEvent} from 'react';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import React, {BaseSyntheticEvent} from "react";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 import {PaginationItem} from "@mui/material";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import {useDispatch, useSelector} from "react-redux";
-import {resetCurrentPage, setCurrentPage} from "../utils/redux/userSelectionReducer";
-import {RootState} from "../utils/redux/store";
+import {resetCurrentPage, setCurrentPage} from "src/utils/redux/userSelectionReducer";
+import {RootState} from "src/utils/redux/store";
+import {
+    ARROW_BACK_ICON,
+    ARROW_FORWARD_ICON,
+    PAGINATION_COMPONENT,
+    PAGINATION_ITEM,
+    PAGINATION_STACK
+} from "src/utils/constants/dataTestIds";
 
 const BasicPagination = () => {
 
@@ -51,27 +58,27 @@ const BasicPagination = () => {
     // Arrow renderers
     const ArrowBack = () => {
         return (
-            <ArrowBackIcon onClick={goToPreviousPage} data-testid="arrow-back-icon"/>
+            <ArrowBackIcon onClick={goToPreviousPage} data-testid={ARROW_BACK_ICON}/>
         );
     }
 
     const ArrowForward = () => {
         return (
-            <ArrowForwardIcon onClick={goToNextPage} data-testid="arrow-forward-icon"/>
+            <ArrowForwardIcon onClick={goToNextPage} data-testid={ARROW_FORWARD_ICON}/>
         );
     }
 
     // Render
     return (
-        <Stack data-testid="pagination-stack" sx={{margin: "16px calc((80vw - 40vw) / 2)"}}>
+        <Stack data-testid={PAGINATION_STACK} sx={{margin: "16px calc((80vw - 40vw) / 2)"}}>
             <Pagination
-                data-testid="pagination-component"
+                data-testid={PAGINATION_COMPONENT}
                 onChange={handleCurrentPageChange}
                 count={Math.ceil(numberOfPages)}
                 page={checkAndUpdateCurrentPage()}
                 renderItem={(item) => (
                     <PaginationItem
-                        data-testid="pagination-item"
+                        data-testid={PAGINATION_ITEM}
                         slots={{
                             previous: ArrowBack,
                             next: ArrowForward

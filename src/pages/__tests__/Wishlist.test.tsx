@@ -1,13 +1,14 @@
 import {act, cleanup, render, screen, within} from "@testing-library/react";
-import Wishlist from "../Wishlist";
+import Wishlist from "src/pages/Wishlist";
 import React from "react";
 import renderer from "react-test-renderer";
 import {Provider} from "react-redux";
-import wishListReducer, {addItem, removeItem} from "../../utils/redux/wishListReducer";
-import productsReducer from "../../utils/redux/productsReducer";
+import wishListReducer, {addItem, removeItem} from "src/utils/redux/wishListReducer";
+import productsReducer from "src/utils/redux/productsReducer";
 import {configureStore} from "@reduxjs/toolkit";
-import {initialState} from "../../utils/constants/testConstants";
-import userSelectionReducer from "../../utils/redux/userSelectionReducer";
+import {initialState} from "src/utils/constants/testConstants";
+import {APP_BAR, CARD, CONTENT_CANVAS, NO_ITEMS_CONTAINER} from "src/utils/constants/dataTestIds";
+import userSelectionReducer from "src/utils/redux/userSelectionReducer";
 
 //Mock store
 const mockStore = configureStore({
@@ -21,8 +22,8 @@ const mockStore = configureStore({
 
 //Mock useNavigate
 const mockedNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
+jest.mock("react-router-dom", () => ({
+    ...jest.requireActual("react-router-dom"),
     useNavigate: () => mockedNavigate
 }));
 
@@ -46,9 +47,9 @@ describe("Wishlist component", () => {
             </Provider>
         );
 
-        const navbar = screen.getByTestId("app-bar");
-        const contentCanvas = screen.getByTestId("content-canvas");
-        const cards = within(contentCanvas).getAllByTestId("card");
+        const navbar = screen.getByTestId(APP_BAR);
+        const contentCanvas = screen.getByTestId(CONTENT_CANVAS);
+        const cards = within(contentCanvas).getAllByTestId(CARD);
 
         expect(navbar).toBeInTheDocument();
         expect(contentCanvas).toBeInTheDocument();
@@ -61,8 +62,8 @@ describe("Wishlist component", () => {
                 <Wishlist/>
             </Provider>
         );
-        const contentCanvas = screen.getByTestId("content-canvas");
-        const noItemsComponent = within(contentCanvas).getByTestId("no-item-container");
+        const contentCanvas = screen.getByTestId(CONTENT_CANVAS);
+        const noItemsComponent = within(contentCanvas).getByTestId(NO_ITEMS_CONTAINER);
 
         expect(noItemsComponent).toBeInTheDocument();
     });

@@ -1,11 +1,12 @@
 import React from "react";
-import {Typography, Box, CircularProgress} from "@mui/material";
+import {Box, CircularProgress, Typography} from "@mui/material";
+import {BOX, CIRCULAR_PROGRESS, TYPOGRAPHY} from "src/utils/constants/dataTestIds";
 
 const Loading = () => {
     return (
-        <Box data-testid="box" style={{flex: "column", position: "absolute", left: "50%", bottom: "50%"}}>
-            <CircularProgress data-testid="circular-progress" color="primary"/>
-            <Typography data-testid="typography" sx={{margin: "15px -15px", fontSize: 20, fontWeight: "bold"}}>
+        <Box data-testid={BOX} style={{flex: "column", position: "absolute", left: "50%", bottom: "50%"}}>
+            <CircularProgress data-testid={CIRCULAR_PROGRESS} color="primary"/>
+            <Typography data-testid={TYPOGRAPHY} sx={{margin: "15px -15px", fontSize: 20, fontWeight: "bold"}}>
                 Loading ...
             </Typography>
         </Box>
