@@ -1,11 +1,11 @@
 import {useEffect, useState} from "react";
 import CompanyFilter from "src/components/CompanyFilter";
 import InfoCard from "src/components/InfoCard";
-import ContentCanvas from "src/utils/styledComponents/ContentCanvas";
-import Flex from "src/utils/styledComponents/Flex";
+import {ContentCanvas} from "src/utils/styledComponents/common/ContentCanvas";
+import {Flex} from "src/utils/styledComponents/home/Flex";
 import PageSelector from "src/components/PageSelector";
 import BasicPagination from "src/components/BasicPagination";
-import Navbar from "src/components/Navbar";
+import Navbar from "src/components/navbar/Navbar";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchDataRequest} from "src/utils/redux/productsReducer";
 import {RootState} from "src/utils/redux/store";
@@ -27,6 +27,9 @@ import {
 } from "src/utils/constants/dataTestIds";
 
 const Home = () => {
+
+    //Globals
+    const LOADING_CONDITION = () => products?.length && searchedProducts?.length !== 0;
 
     // Redux hooks
     const dispatch = useDispatch();
@@ -115,7 +118,7 @@ const Home = () => {
 
     //Render
     const renderProductListOrNotFound = (() => {
-        if (products?.length && searchedProducts?.length) {
+        if (LOADING_CONDITION()) {
             return products.map((e, i) => (
                 <InfoCard data-testid={CARD} productProps={e} key={i}/>
             ));
@@ -127,7 +130,7 @@ const Home = () => {
     })();
 
     const renderPagination = (() => {
-        if (products?.length && searchedProducts?.length !== 0 && isHomePageLoaded) {
+        if (LOADING_CONDITION() && isHomePageLoaded) {
             return (
                 <>
                     <PageSelector data-testid={BOX_COMPONENT}/>
@@ -145,7 +148,7 @@ const Home = () => {
                 <ContentCanvas data-testid={CONTENT_CANVAS}>
                     {renderProductListOrNotFound}
                 </ContentCanvas>
-                <CompanyFilter data-testid={RIGHT_PANEL}/>
+                {LOADING_CONDITION() && <CompanyFilter data-testid={RIGHT_PANEL}/>}
             </Flex>
             {renderPagination}
         </>

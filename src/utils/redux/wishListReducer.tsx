@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit"
 
 type DataState = {
-    ids: number[];
+    ids: string[];
 }
 
 const initialState: DataState = {
@@ -12,12 +12,12 @@ export const wishListSlice = createSlice({
     name: "wishListSlice",
     initialState,
     reducers: {
-        addItem: (state: DataState, action: PayloadAction<number>) => {
+        addItem: (state: DataState, action: PayloadAction<string>) => {
             if (!state.ids.includes(action.payload)) {
                 state.ids.push(action.payload);
             }
         },
-        removeItem: (state: DataState, action: PayloadAction<number>) => {
+        removeItem: (state: DataState, action: PayloadAction<string>) => {
             const index = state.ids.findIndex((e) => e === action.payload);
             if (index !== -1) {
                 state.ids.splice(index, 1);

@@ -6,7 +6,7 @@ import productsReducer from "src/utils/redux/productsReducer";
 import wishListReducer from "src/utils/redux/wishListReducer";
 import {configureStore} from "@reduxjs/toolkit";
 import {Provider} from "react-redux";
-import deepCopy from "src/utils/helpers/deepCopy";
+import {deepCopy} from "src/utils/helpers/deepCopy";
 import renderer from "react-test-renderer";
 import Wishlist from "src/pages/Wishlist";
 import {
@@ -38,6 +38,7 @@ jest.mock("react-router-dom", () => ({
     ...jest.requireActual("react-router-dom"),
     useNavigate: () => mockedNavigate
 }));
+
 describe("Home component", () => {
     afterEach(() => {
         cleanup();

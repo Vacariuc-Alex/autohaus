@@ -37,14 +37,14 @@ Array [
           />
         </svg>
         <a
-          className="MuiTypography-root MuiTypography-h6 MuiTypography-noWrap css-1kkti6u-MuiTypography-root"
+          className="MuiTypography-root MuiTypography-h6 MuiTypography-noWrap sc-beySPh czdRFU css-8u39c-MuiTypography-root"
           data-testid="typography"
           href="#"
         >
           Autohaus
         </a>
         <div
-          className="MuiBox-root css-1l0r181"
+          className="MuiBox-root css-z5t31v"
           data-testid="box"
         >
           <button
@@ -118,7 +118,7 @@ Array [
     </div>
   </header>,
   <div
-    className="sc-beySPh fqIaxA"
+    className="sc-guDLey GgLoT"
     data-testid="page-not-found-container"
     style={
       Object {

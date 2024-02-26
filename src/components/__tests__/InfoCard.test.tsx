@@ -1,4 +1,4 @@
-import {cleanup, fireEvent, render, screen} from "@testing-library/react";
+import {cleanup, fireEvent, render, screen, within} from "@testing-library/react";
 import InfoCard from "src/components/InfoCard";
 import {configureStore} from "@reduxjs/toolkit";
 import wishListReducer, {addItem, removeItem} from "src/utils/redux/wishListReducer";
@@ -20,6 +20,7 @@ import {
 
 //Globals
 const mockProduct = initialState.productsStore.responseData[0];
+window.open = jest.fn();
 
 //Test data
 const infoCardContent: [number, string][] = [[0, "WAZ 2106, Red, 1986"], [1, "250 $"], [2, "JTDZN3EU4E3035524"]];
@@ -63,6 +64,37 @@ describe("InfoCard component", () => {
         typographies.forEach((e) => {
             expect(e).toBeInTheDocument();
         });
+    });
+
+    test("Should open a new page when item is clicked", () => {
+        render(
+            <Provider store={mockStore}>
+                <InfoCard productProps={mockProduct}/>
+            </Provider>
+        );
+
+        const card = screen.getByTestId(CARD);
+        const cardActionArea = within(card).getByTestId(CARD_ACTION_AREA);
+        const cardMedia = within(cardActionArea).getByTestId(CARD_MEDIA);
+
+        fireEvent.click(cardMedia);
+        expect(window.open).toHaveBeenCalledWith("/product/MQ==", "_blank");
+
+    });
+
+    test("Should display default image in case an error occurs while loading the image", () => {
+        render(
+            <Provider store={mockStore}>
+                <InfoCard productProps={mockProduct}/>
+            </Provider>
+        );
+
+        const card = screen.getByTestId(CARD);
+        const cardActionArea = within(card).getByTestId(CARD_ACTION_AREA);
+        const cardMedia = within(cardActionArea).getByTestId(CARD_MEDIA);
+
+        fireEvent.error(cardMedia);
+        expect(cardMedia).toHaveAttribute("src");
     });
 
     test.each(infoCardContent)("Should be displayed correct product information", (index, text) => {
@@ -121,8 +153,8 @@ describe("InfoCard component", () => {
 
     describe("Given the mockProduct is included in wishList", () => {
         test("Should permanent display checked heart if redux store contains element's id and hide when isUnchecked", () => {
-            mockStore.dispatch(addItem(1));
-            expect(mockStore.getState().wishListStore.ids).toEqual([1]);
+            mockStore.dispatch(addItem("1"));
+            expect(mockStore.getState().wishListStore.ids).toEqual(["1"]);
 
             render(
                 <Provider store={mockStore}>
@@ -143,7 +175,7 @@ describe("InfoCard component", () => {
             expect(favouriteArea).toHaveStyle({opacity: 0});
             expect(ioIosHeart).not.toBeInTheDocument();
 
-            mockStore.dispatch(removeItem(1));
+            mockStore.dispatch(removeItem("1"));
             expect(mockStore.getState().wishListStore.ids).toEqual([]);
         });
     });

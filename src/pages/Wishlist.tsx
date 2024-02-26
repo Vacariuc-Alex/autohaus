@@ -1,8 +1,8 @@
 import React from "react";
-import Navbar from "src/components/Navbar";
+import Navbar from "src/components/navbar/Navbar";
 import {useSelector} from "react-redux";
 import {RootState} from "src/utils/redux/store";
-import ContentCanvas from "src/utils/styledComponents/ContentCanvas";
+import {ContentCanvas} from "src/utils/styledComponents/common/ContentCanvas";
 import {Product} from "src/utils/constants/constants";
 import InfoCard from "src/components/InfoCard";
 import {createSelector} from "@reduxjs/toolkit";
@@ -13,7 +13,7 @@ const Wishlist = () => {
 
     const selectWishListIds = (state: RootState) => state.wishListStore.ids;
     const selectResponseData = (state: RootState) => state.productsStore.responseData;
-    const selectorCombiner = (wishListIds: number[], responseData: Product[]) => {
+    const selectorCombiner = (wishListIds: string[], responseData: Product[]) => {
         return {
             wishListIds,
             responseData
@@ -22,20 +22,28 @@ const Wishlist = () => {
     const combinedSelector = createSelector(selectWishListIds, selectResponseData, selectorCombiner);
     const selector = useSelector(combinedSelector);
 
-    const getElement = (e: number): Product => {
-        return selector.responseData[--e];
+    const getElement = (e: string): Product | undefined => {
+        return selector.responseData.find((responseDataElement) => responseDataElement.id === e);
     }
+
+    const renderProductsInWishList = (() => {
+        if (selector.wishListIds.length !== 0) {
+            return selector.wishListIds.map((e, i) => {
+                const product = getElement(e);
+                if (product) {
+                    return <InfoCard data-testid={CARD} productProps={product} key={i}/>;
+                }
+                return <NoFavouriteItems data-testid={NO_ITEMS_CONTAINER}/>
+            })
+        }
+        return <NoFavouriteItems data-testid={NO_ITEMS_CONTAINER}/>
+    })();
 
     return (
         <>
             <Navbar data-testid={APP_BAR}/>
-            <ContentCanvas data-testid={CONTENT_CANVAS} style={{width: "100%"}}>
-                {selector.wishListIds.length !== 0
-                    ? selector.wishListIds.map((e, i) => (
-                        <InfoCard data-testid={CARD} productProps={getElement(e)} key={i}/>
-                    ))
-                    : <NoFavouriteItems data-testid={NO_ITEMS_CONTAINER}/>
-                }
+            <ContentCanvas data-testid={CONTENT_CANVAS}>
+                {renderProductsInWishList}
             </ContentCanvas>
         </>
     );

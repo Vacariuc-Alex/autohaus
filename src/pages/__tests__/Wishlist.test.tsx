@@ -30,16 +30,16 @@ jest.mock("react-router-dom", () => ({
 describe("Wishlist component", () => {
     afterEach(() => {
         act(() => {
-            mockStore.dispatch(removeItem(1));
-            mockStore.dispatch(removeItem(2));
+            mockStore.dispatch(removeItem("1"));
+            mockStore.dispatch(removeItem("2"));
         });
         cleanup();
     });
 
     test("Should render Wishlist component", () => {
-        mockStore.dispatch(addItem(1));
-        mockStore.dispatch(addItem(2));
-        expect(mockStore.getState().wishListStore.ids).toEqual([1, 2]);
+        mockStore.dispatch(addItem("1"));
+        mockStore.dispatch(addItem("2"));
+        expect(mockStore.getState().wishListStore.ids).toEqual(["1", "2"]);
 
         render(
             <Provider store={mockStore}>
@@ -56,7 +56,20 @@ describe("Wishlist component", () => {
         expect(cards.length).toBe(2);
     });
 
-    test("Should render Wishlist component with no elements", () => {
+    test("Should render Wishlist component when there are no favourite elements", () => {
+        render(
+            <Provider store={mockStore}>
+                <Wishlist/>
+            </Provider>
+        );
+        const contentCanvas = screen.getByTestId(CONTENT_CANVAS);
+        const noItemsComponent = within(contentCanvas).getByTestId(NO_ITEMS_CONTAINER);
+
+        expect(noItemsComponent).toBeInTheDocument();
+    });
+
+    test("Should render the Wishlist component if the product ID exists in the wishlist but the product itself doesn't", () => {
+        mockStore.dispatch(addItem("3"));
         render(
             <Provider store={mockStore}>
                 <Wishlist/>

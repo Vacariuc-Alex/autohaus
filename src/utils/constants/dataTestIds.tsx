@@ -56,6 +56,12 @@ export const SEARCH_ICON_WRAPPER = "search-icon-wrapper";
 export const SEARCH_ICON = "search-icon";
 export const STYLED_INPUT_BASE = "styled-input-base";
 export const BUTTON = "button";
+export const DIALOG = "dialog";
+export const DIALOG_TITLE = "dialog-title";
+export const DIALOG_CONTENT = "dialog-content";
+export const DIALOG_CONTENT_TEXT = "dialog-content-text";
+export const TEXT_FIELD = "text-field";
+export const DIALOG_ACTIONS = "dialog-actions";
 
 // PageSelector
 export const FORM_CONTROL = "form-control";
@@ -63,10 +69,18 @@ export const INPUT_LABEL = "input-label";
 export const SELECT_COMPONENT = "select-component";
 export const MENU_ITEM = "menu-item";
 
-//Pages
+// Pages
 // Home
 export const ERROR = "error";
 export const FLEX = "flex";
 
 // PageNotFound
 export const PAGE_NOT_FOUND_CONTAINER = "page-not-found-container";
+
+// ElementDetails
+export const ELEMENT_PROPERTIES_CONTAINER = "element-properties-container";
+export const ELEMENT_CONTROLS_CONTAINER = "element-controls-container";
+export const ELEMENT_DETAILS_CONTAINER = "element-details-container";
+export const ELEMENT_DETAILS_PROPERTY_LIST = "element-details-property-list";
+export const ICON = "icon";
+export const PAGE = "page";
