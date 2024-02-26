@@ -1,12 +1,22 @@
-import {cleanup, fireEvent, render, screen, within} from '@testing-library/react';
-import PageSelector from "../PageSelector";
+import {cleanup, fireEvent, render, screen, within} from "@testing-library/react";
+import PageSelector from "src/components/PageSelector";
 import React from "react";
 import {configureStore} from "@reduxjs/toolkit";
-import wishListReducer from "../../utils/redux/wishListReducer";
-import userSelectionReducer from "../../utils/redux/userSelectionReducer";
-import productsReducer from "../../utils/redux/productsReducer";
-import {initialState} from "../../utils/constants/testConstants";
+import wishListReducer from "src/utils/redux/wishListReducer";
+import userSelectionReducer from "src/utils/redux/userSelectionReducer";
+import productsReducer from "src/utils/redux/productsReducer";
+import {initialState} from "src/utils/constants/testConstants";
 import {Provider} from "react-redux";
+import {
+    BOX_COMPONENT,
+    COMBOBOX,
+    FORM_CONTROL,
+    INPUT_LABEL,
+    LISTBOX,
+    MENU_ITEM,
+    PRESENTATION,
+    SELECT_COMPONENT
+} from "src/utils/constants/dataTestIds";
 
 //Globals
 const elementsPerPage = ["10", "20", "50", "100", "200", "500", "1000"];
@@ -32,10 +42,10 @@ describe("PageSelector component", () => {
                 <PageSelector/>
             </Provider>
         );
-        const boxComponent = screen.getByTestId("box-component");
-        const formControl = screen.getByTestId("form-control");
-        const inputLabel = screen.getByTestId("input-label");
-        const selectComponent = screen.getByTestId("select-component");
+        const boxComponent = screen.getByTestId(BOX_COMPONENT);
+        const formControl = screen.getByTestId(FORM_CONTROL);
+        const inputLabel = screen.getByTestId(INPUT_LABEL);
+        const selectComponent = screen.getByTestId(SELECT_COMPONENT);
 
         expect(boxComponent).toBeInTheDocument();
         expect(formControl).toBeInTheDocument();
@@ -51,13 +61,13 @@ describe("PageSelector component", () => {
                 <PageSelector/>
             </Provider>
         );
-        const selectComponent = screen.getByTestId("select-component");
-        const button = within(selectComponent).getByRole("combobox");
+        const selectComponent = screen.getByTestId(SELECT_COMPONENT);
+        const button = within(selectComponent).getByRole(COMBOBOX);
         fireEvent.mouseDown(button);
 
-        const presentation = screen.getByRole("presentation");
-        const listbox = within(presentation).getByRole("listbox");
-        const menuItems = within(listbox).getAllByTestId("menu-item");
+        const presentation = screen.getByRole(PRESENTATION);
+        const listbox = within(presentation).getByRole(LISTBOX);
+        const menuItems = within(listbox).getAllByTestId(MENU_ITEM);
         menuItems.forEach((e) => {
             expect(e).toBeInTheDocument();
             expect(elementsPerPage).toContain(e.textContent);

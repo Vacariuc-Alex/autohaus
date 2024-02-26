@@ -1,6 +1,12 @@
 import {cleanup, render, screen} from "@testing-library/react";
 import React from "react";
-import NoFavouriteItems from "../NoFavouriteItems";
+import NoFavouriteItems from "src/components/NoFavouriteItems";
+import {
+    IMG_CONTAINER,
+    NO_ITEMS_CONTAINER,
+    TYPOGRAPHY_HEADING_CONTAINER,
+    TYPOGRAPHY_PARAGRAPH_CONTAINER
+} from "src/utils/constants/dataTestIds";
 
 describe("NoItems component", () => {
     afterEach(() => {
@@ -9,10 +15,10 @@ describe("NoItems component", () => {
 
     test("Should render NoFavouriteItems component", () => {
         render(<NoFavouriteItems/>);
-        const noItemContainer = screen.getByTestId("no-item-container");
-        const imgContainer = screen.getByTestId("img-container");
-        const typographyHeadingContainer = screen.getByTestId("typography-heading-container");
-        const typographyParagraphContainer = screen.getByTestId("typography-paragraph-container");
+        const noItemContainer = screen.getByTestId(NO_ITEMS_CONTAINER);
+        const imgContainer = screen.getByTestId(IMG_CONTAINER);
+        const typographyHeadingContainer = screen.getByTestId(TYPOGRAPHY_HEADING_CONTAINER);
+        const typographyParagraphContainer = screen.getByTestId(TYPOGRAPHY_PARAGRAPH_CONTAINER);
 
         expect(noItemContainer).toBeInTheDocument();
 

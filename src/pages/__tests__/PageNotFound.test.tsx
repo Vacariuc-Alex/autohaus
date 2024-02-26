@@ -1,10 +1,11 @@
 import {cleanup, render, screen, within} from "@testing-library/react";
 import renderer from "react-test-renderer";
-import PageNotFound from "../PageNotFound";
+import PageNotFound from "src/pages/PageNotFound";
 import React from "react";
+import {APP_BAR, IMG, PAGE_NOT_FOUND_CONTAINER, TYPOGRAPHY} from "src/utils/constants/dataTestIds";
 
 //Globals
-const notFoundContainerMessages: {index: number, value: string}[] = [
+const notFoundContainerMessages: { index: number, value: string }[] = [
     {index: 0, value: "404"},
     {index: 1, value: "Page Not Found!"},
     {index: 2, value: "Sorry, the page you're looking for does not exist!"}
@@ -12,8 +13,8 @@ const notFoundContainerMessages: {index: number, value: string}[] = [
 
 // Mock useNavigate
 const mockedNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
+jest.mock("react-router-dom", () => ({
+    ...jest.requireActual("react-router-dom"),
     useNavigate: () => mockedNavigate
 }));
 
@@ -24,10 +25,10 @@ describe("PageNotFound component", () => {
 
     test("Should render PageNotFound component", () => {
         render(<PageNotFound/>);
-        const navbar = screen.getByTestId("app-bar");
-        const notFoundContainer = screen.getByTestId("page-not-found-container");
-        const typographies = within(notFoundContainer).getAllByTestId("typography");
-        const image = within(notFoundContainer).getByRole("img");
+        const navbar = screen.getByTestId(APP_BAR);
+        const notFoundContainer = screen.getByTestId(PAGE_NOT_FOUND_CONTAINER);
+        const typographies = within(notFoundContainer).getAllByTestId(TYPOGRAPHY);
+        const image = within(notFoundContainer).getByRole(IMG);
 
         expect(navbar).toBeInTheDocument();
         expect(notFoundContainer).toBeInTheDocument();

@@ -1,8 +1,9 @@
 import {Typography} from "@mui/material";
 import React from "react";
-import itemNotFound from "../assets/img/ItemNotFound.png"
+import itemNotFound from "src/assets/img/ItemNotFound.png"
 import {useSpring} from "react-spring";
-import {NoItemContainer} from "../utils/styledComponents/NoItemsContainer";
+import {NoItemContainer} from "src/utils/styledComponents/NoItemsContainer";
+import {IMAGE, NO_ITEMS_CONTAINER, TYPOGRAPHY} from "src/utils/constants/dataTestIds";
 
 const ItemNotFound = () => {
 
@@ -13,14 +14,14 @@ const ItemNotFound = () => {
     });
 
     return (
-        <NoItemContainer data-testid="no-item-container" style={animationProps}>
+        <NoItemContainer data-testid={NO_ITEMS_CONTAINER} style={animationProps}>
             <img
-                data-testid="image"
+                data-testid={IMAGE}
                 src={itemNotFound}
                 alt="Item not found"
                 style={{width: 500, marginLeft: "calc((100% - 500px) / 2)"}}
             />
-            <Typography data-testid="typography" variant="h5" gutterBottom sx={{marginTop: 3}}>
+            <Typography data-testid={TYPOGRAPHY} variant="h5" gutterBottom sx={{marginTop: 3}}>
                 This item currently doesn't exist in our stock!
             </Typography>
         </NoItemContainer>

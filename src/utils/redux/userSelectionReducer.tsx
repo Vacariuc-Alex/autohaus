@@ -15,7 +15,7 @@ const initialState: DataState = {
 }
 
 export const userSelectionSlice = createSlice({
-    name: 'userSelectionSlice',
+    name: "userSelectionSlice",
     initialState,
     reducers: {
         // selectedCompanies

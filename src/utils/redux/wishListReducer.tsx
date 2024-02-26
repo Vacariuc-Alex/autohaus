@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {createSlice, PayloadAction} from "@reduxjs/toolkit"
 
 type DataState = {
     ids: number[];
@@ -9,7 +9,7 @@ const initialState: DataState = {
 }
 
 export const wishListSlice = createSlice({
-    name: 'wishListSlice',
+    name: "wishListSlice",
     initialState,
     reducers: {
         addItem: (state: DataState, action: PayloadAction<number>) => {

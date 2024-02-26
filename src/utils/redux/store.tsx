@@ -1,9 +1,9 @@
 import {configureStore} from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
-import rootSaga from "../saga/rootSaga";
-import wishListReducer from "./wishListReducer";
-import productsReducer from "./productsReducer";
-import userSelectionReducer from "./userSelectionReducer";
+import rootSaga from "src/utils/saga/rootSaga";
+import wishListReducer from "src/utils/redux/wishListReducer";
+import productsReducer from "src/utils/redux/productsReducer";
+import userSelectionReducer from "src/utils/redux/userSelectionReducer";
 
 const sagaMiddleware = createSagaMiddleware();
 

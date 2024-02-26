@@ -1,12 +1,13 @@
 import {render, screen, within} from "@testing-library/react";
-import ItemNotFound from "../ItemNotFound";
+import ItemNotFound from "src/components/ItemNotFound";
+import {IMAGE, NO_ITEMS_CONTAINER, TYPOGRAPHY} from "src/utils/constants/dataTestIds";
 
 describe("ItemNotFound component", () => {
     test("Should render ItemNotFound component", () => {
         render(<ItemNotFound/>);
-        const noItemContainer = screen.getByTestId("no-item-container");
-        const image = within(noItemContainer).getByTestId("image");
-        const typography = within(noItemContainer).getByTestId("typography");
+        const noItemContainer = screen.getByTestId(NO_ITEMS_CONTAINER);
+        const image = within(noItemContainer).getByTestId(IMAGE);
+        const typography = within(noItemContainer).getByTestId(TYPOGRAPHY);
 
         expect(noItemContainer).toBeInTheDocument();
         expect(image).toBeInTheDocument();

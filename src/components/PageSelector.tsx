@@ -1,12 +1,13 @@
 import React from "react";
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, {SelectChangeEvent} from '@mui/material/Select';
-import {resetCurrentPage, setElementsPerPage} from "../utils/redux/userSelectionReducer";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, {SelectChangeEvent} from "@mui/material/Select";
+import {resetCurrentPage, setElementsPerPage} from "src/utils/redux/userSelectionReducer";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../utils/redux/store";
+import {RootState} from "src/utils/redux/store";
+import {BOX_COMPONENT, FORM_CONTROL, INPUT_LABEL, MENU_ITEM, SELECT_COMPONENT} from "src/utils/constants/dataTestIds";
 
 const PageSelector = () => {
 
@@ -22,17 +23,17 @@ const PageSelector = () => {
     }
 
     return (
-        <Box data-testid="box-component" sx={{width: "40vw", margin: "0 calc((80vw - 40vw) / 2)"}}>
-            <FormControl fullWidth data-testid="form-control">
+        <Box data-testid={BOX_COMPONENT} sx={{width: "40vw", margin: "0 calc((80vw - 40vw) / 2)"}}>
+            <FormControl fullWidth data-testid={FORM_CONTROL}>
                 <InputLabel
-                    data-testid="input-label"
+                    data-testid={INPUT_LABEL}
                     id="elements-per-page-label"
                     sx={{top: -12}}
                 >
                     Elements per Page
                 </InputLabel>
                 <Select
-                    data-testid="select-component"
+                    data-testid={SELECT_COMPONENT}
                     labelId="elements-per-page-label"
                     id="products-per-page"
                     value={String(elementsPerPage)}
@@ -40,7 +41,7 @@ const PageSelector = () => {
                 >
                     {
                         elementsPerPageRange.map((e, i) => (
-                            <MenuItem data-testid="menu-item" value={e} key={i}>{e}</MenuItem>
+                            <MenuItem data-testid={MENU_ITEM} value={e} key={i}>{e}</MenuItem>
                         ))
                     }
                 </Select>

@@ -1,17 +1,24 @@
-import React from 'react';
-import {act, cleanup, fireEvent, render, screen, within} from '@testing-library/react';
-import BasicPagination from '../BasicPagination';
+import React from "react";
+import {act, cleanup, fireEvent, render, screen, within} from "@testing-library/react";
+import BasicPagination from "src/components/BasicPagination";
 import {configureStore} from "@reduxjs/toolkit";
-import wishListReducer from "../../utils/redux/wishListReducer";
-import productsReducer from "../../utils/redux/productsReducer";
+import wishListReducer from "src/utils/redux/wishListReducer";
+import productsReducer from "src/utils/redux/productsReducer";
 import userSelectionReducer, {
     resetCurrentPage,
     resetNumberOfPages,
     setCurrentPage,
     setNumberOfPages
-} from "../../utils/redux/userSelectionReducer";
-import {initialState} from "../../utils/constants/testConstants";
+} from "src/utils/redux/userSelectionReducer";
+import {initialState} from "src/utils/constants/testConstants";
 import {Provider} from "react-redux";
+import {
+    ARROW_BACK_ICON,
+    ARROW_FORWARD_ICON,
+    PAGINATION_COMPONENT,
+    PAGINATION_ITEM,
+    PAGINATION_STACK
+} from "src/utils/constants/dataTestIds";
 
 //Test data
 const paginationItemsData = [[1, 1], [2, 2], [3, 3]];
@@ -44,9 +51,9 @@ describe("BasicPagination component", () => {
                 <BasicPagination/>
             </Provider>
         );
-        const paginationStack = screen.getByTestId("pagination-stack");
-        const paginationComponent = within(paginationStack).getByTestId("pagination-component");
-        const paginationItems = within(paginationComponent).getAllByTestId("pagination-item");
+        const paginationStack = screen.getByTestId(PAGINATION_STACK);
+        const paginationComponent = within(paginationStack).getByTestId(PAGINATION_COMPONENT);
+        const paginationItems = within(paginationComponent).getAllByTestId(PAGINATION_ITEM);
 
         expect(paginationStack).toBeInTheDocument();
         expect(paginationComponent).toBeInTheDocument();
@@ -61,9 +68,9 @@ describe("BasicPagination component", () => {
                 <BasicPagination/>
             </Provider>
         );
-        const paginationStack = screen.getByTestId("pagination-stack");
-        const paginationComponent = within(paginationStack).getByTestId("pagination-component");
-        const paginationItems = within(paginationComponent).getAllByTestId("pagination-item");
+        const paginationStack = screen.getByTestId(PAGINATION_STACK);
+        const paginationComponent = within(paginationStack).getByTestId(PAGINATION_COMPONENT);
+        const paginationItems = within(paginationComponent).getAllByTestId(PAGINATION_ITEM);
 
         fireEvent.click(paginationItems[pageIndex]);
         expect(paginationItems[pageIndex].textContent).toEqual(String(pageValue));
@@ -78,11 +85,11 @@ describe("BasicPagination component", () => {
                 <BasicPagination/>
             </Provider>
         );
-        const arrowForwardIcon = screen.getByTestId("arrow-forward-icon");
+        const arrowForwardIcon = screen.getByTestId(ARROW_FORWARD_ICON);
         fireEvent.click(arrowForwardIcon);
         expect(mockStore.getState().userSelectionStore.currentPage).toEqual(2);
 
-        const arrowBackIcon = screen.getByTestId("arrow-back-icon");
+        const arrowBackIcon = screen.getByTestId(ARROW_BACK_ICON);
         fireEvent.click(arrowBackIcon);
         expect(mockStore.getState().userSelectionStore.currentPage).toEqual(1);
     });
@@ -93,11 +100,11 @@ describe("BasicPagination component", () => {
                 <BasicPagination/>
             </Provider>
         );
-        const arrowForwardIcon = screen.getByTestId("arrow-forward-icon");
+        const arrowForwardIcon = screen.getByTestId(ARROW_FORWARD_ICON);
         fireEvent.click(arrowForwardIcon);
         expect(mockStore.getState().userSelectionStore.currentPage).toEqual(1);
 
-        const arrowBackIcon = screen.getByTestId("arrow-back-icon");
+        const arrowBackIcon = screen.getByTestId(ARROW_BACK_ICON);
         fireEvent.click(arrowBackIcon);
         expect(mockStore.getState().userSelectionStore.currentPage).toEqual(1);
     });

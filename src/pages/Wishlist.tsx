@@ -1,12 +1,13 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "src/components/Navbar";
 import {useSelector} from "react-redux";
-import {RootState} from "../utils/redux/store";
-import ContentCanvas from "../utils/styledComponents/ContentCanvas";
-import {Product} from "../utils/constants/constants";
-import InfoCard from "../components/InfoCard";
+import {RootState} from "src/utils/redux/store";
+import ContentCanvas from "src/utils/styledComponents/ContentCanvas";
+import {Product} from "src/utils/constants/constants";
+import InfoCard from "src/components/InfoCard";
 import {createSelector} from "@reduxjs/toolkit";
-import NoFavouriteItems from "../components/NoFavouriteItems";
+import NoFavouriteItems from "src/components/NoFavouriteItems";
+import {APP_BAR, CARD, CONTENT_CANVAS, NO_ITEMS_CONTAINER} from "src/utils/constants/dataTestIds";
 
 const Wishlist = () => {
 
@@ -27,13 +28,13 @@ const Wishlist = () => {
 
     return (
         <>
-            <Navbar data-testid="app-bar"/>
-            <ContentCanvas data-testid="content-canvas" style={{width: "100%"}}>
+            <Navbar data-testid={APP_BAR}/>
+            <ContentCanvas data-testid={CONTENT_CANVAS} style={{width: "100%"}}>
                 {selector.wishListIds.length !== 0
                     ? selector.wishListIds.map((e, i) => (
-                        <InfoCard data-testid="card" productProps={getElement(e)} key={i}/>
+                        <InfoCard data-testid={CARD} productProps={getElement(e)} key={i}/>
                     ))
-                    : <NoFavouriteItems data-testid="no-item-container"/>
+                    : <NoFavouriteItems data-testid={NO_ITEMS_CONTAINER}/>
                 }
             </ContentCanvas>
         </>

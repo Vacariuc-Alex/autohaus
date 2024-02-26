@@ -1,8 +1,8 @@
-import React from 'react';
-import './App.css';
-import Home from "./pages/Home";
-import Wishlist from "./pages/Wishlist";
-import PageNotFound from "./pages/PageNotFound";
+import React from "react";
+import "src/App.css";
+import Home from "src/pages/Home";
+import Wishlist from "src/pages/Wishlist";
+import PageNotFound from "src/pages/PageNotFound";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 
 function App() {

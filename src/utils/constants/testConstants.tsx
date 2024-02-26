@@ -1,4 +1,4 @@
-import {Product} from "./constants";
+import {Product} from "src/utils/constants/constants";
 
 export const stubResponseData = [
     {

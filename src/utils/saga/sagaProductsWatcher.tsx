@@ -1,5 +1,5 @@
 import {call, put, takeEvery} from "redux-saga/effects";
-import {fetchDataRequest, fetchDataSuccess, fetchDataError} from "../redux/productsReducer"
+import {fetchDataError, fetchDataRequest, fetchDataSuccess} from "src/utils/redux/productsReducer";
 import axios from "axios";
 
 const fetchAxios = () => {
