@@ -1,6 +1,6 @@
 import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
 import React, {BaseSyntheticEvent} from "react";
-import RightPanel from "src/utils/styledComponents/RightPanel";
+import {RightPanel} from "src/utils/styledComponents/companyFilter/RightPanel";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "src/utils/redux/store";
 import {createSelector} from "@reduxjs/toolkit";

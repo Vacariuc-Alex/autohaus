@@ -2,7 +2,7 @@ import {Typography} from "@mui/material";
 import React from "react";
 import sadHeart from "src/assets/img/SadHeart.png"
 import {useSpring} from "react-spring";
-import {NoItemContainer} from "src/utils/styledComponents/NoItemsContainer";
+import {NoItemContainer} from "src/utils/styledComponents/common/NoItemsContainer";
 import {
     IMG_CONTAINER,
     NO_ITEMS_CONTAINER,

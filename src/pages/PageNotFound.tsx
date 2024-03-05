@@ -1,8 +1,8 @@
 import React from "react";
 import {useSpring} from "react-spring";
-import Navbar from "src/components/Navbar";
+import Navbar from "src/components/navbar/Navbar";
 import {Typography} from "@mui/material";
-import {PageNotFoundContainer} from "src/utils/styledComponents/PageNotFoundContainer";
+import {PageNotFoundContainer} from "src/utils/styledComponents/pageNotFound/PageNotFoundContainer";
 import pageNotFoundImage from "src/assets/img/PageNotFound.png"
 import {PAGE_NOT_FOUND_CONTAINER, TYPOGRAPHY} from "src/utils/constants/dataTestIds";
 

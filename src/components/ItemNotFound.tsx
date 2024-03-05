@@ -2,7 +2,7 @@ import {Typography} from "@mui/material";
 import React from "react";
 import itemNotFound from "src/assets/img/ItemNotFound.png"
 import {useSpring} from "react-spring";
-import {NoItemContainer} from "src/utils/styledComponents/NoItemsContainer";
+import {NoItemContainer} from "src/utils/styledComponents/common/NoItemsContainer";
 import {IMAGE, NO_ITEMS_CONTAINER, TYPOGRAPHY} from "src/utils/constants/dataTestIds";
 
 const ItemNotFound = () => {
