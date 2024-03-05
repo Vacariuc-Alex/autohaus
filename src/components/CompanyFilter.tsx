@@ -13,7 +13,7 @@ const CompanyFilter = () => {
     // Redux hooks
     const dispatch = useDispatch();
     const selectedCompaniesSelector = (state: RootState) => state.userSelectionStore.selectedCompanies;
-    const responseDataSelector = (state: RootState) => state.productsStore.responseData;
+    const productResponseDataSelector = (state: RootState) => state.productsStore.responseData;
     const selectorCombiner = (selectedCompaniesSelector: string[], responseDataSelector: Product[]) => {
         return {
             selectedCompaniesSelector: selectedCompaniesSelector,
@@ -26,12 +26,12 @@ const CompanyFilter = () => {
             ).sort(),
         };
     };
-    const combinedSelector = createSelector(selectedCompaniesSelector, responseDataSelector, selectorCombiner);
+    const combinedSelector = createSelector(selectedCompaniesSelector, productResponseDataSelector, selectorCombiner);
     const selector = useSelector(combinedSelector);
 
     //Redux Simplified variable names
     const companies = selector.selectedCompaniesSelector;
-    const responseData = selector.responseDataSelector;
+    const productResponseData = selector.responseDataSelector;
 
     // Handlers
     const handleCompanyChange = (e: BaseSyntheticEvent) => {
@@ -58,7 +58,7 @@ const CompanyFilter = () => {
         <RightPanel data-testid={RIGHT_PANEL}>
             <FormGroup data-testid={FORM_GROUP} sx={formGroupStyle}>
                 {
-                    responseData.map((e: string, i: number) => (
+                    productResponseData.map((e: string, i: number) => (
                         <FormControlLabel
                             data-testid={FORM_CONTROL_LABEL}
                             control={<Checkbox data-testid={CHECKBOX}/>}

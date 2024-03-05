@@ -17,6 +17,7 @@ import {
     IO_IOS_HEART_EMPTY,
     TYPOGRAPHY
 } from "src/utils/constants/dataTestIds";
+import usersReducer from "src/utils/redux/usersReducer";
 
 //Globals
 const mockProduct = initialState.productsStore.responseData[0];
@@ -29,6 +30,7 @@ const infoCardContent: [number, string][] = [[0, "WAZ 2106, Red, 1986"], [1, "25
 const mockStore = configureStore({
     reducer: {
         wishListStore: wishListReducer,
+        usersStore: usersReducer,
         productsStore: productsReducer,
         userSelectionStore: userSelectionReducer
     },

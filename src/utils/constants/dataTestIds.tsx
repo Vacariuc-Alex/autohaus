@@ -3,6 +3,7 @@ export const LISTBOX = "listbox";
 export const PRESENTATION = "presentation";
 export const COMBOBOX = "combobox";
 export const TEXTBOX = "textbox";
+export const MENU = "menu";
 
 // Globals
 export const CHECKBOX = "checkbox";
@@ -15,7 +16,14 @@ export const BOX_COMPONENT = "box-component";
 export const APP_BAR = "app-bar";
 export const RIGHT_PANEL = "right-panel";
 export const NO_ITEMS_CONTAINER = "no-item-container";
-export const PAGINATION_STACK = "pagination-stack"; //home
+export const PAGINATION_STACK = "pagination-stack";
+export const MENU_ITEM = "menu-item";
+export const BACKGROUND_IMAGE_WRAPPER = "background-image-wrapper";
+export const CONTAINER = "container";
+export const AVATAR = "avatar";
+export const BUTTON = "button";
+export const ERROR = "error";
+export const FLEX = "flex";
 
 // Components
 // BasicPagination
@@ -48,32 +56,27 @@ export const IMAGE = "image";
 export const CIRCULAR_PROGRESS = "circular-progress";
 
 // Navbar
-export const CONTAINER = "container";
 export const TOOLBAR = "toolbar";
 export const FA_CAR_ICON = "fa-car-icon";
 export const SEARCH = "search";
 export const SEARCH_ICON_WRAPPER = "search-icon-wrapper";
 export const SEARCH_ICON = "search-icon";
 export const STYLED_INPUT_BASE = "styled-input-base";
-export const BUTTON = "button";
 export const DIALOG = "dialog";
 export const DIALOG_TITLE = "dialog-title";
 export const DIALOG_CONTENT = "dialog-content";
 export const DIALOG_CONTENT_TEXT = "dialog-content-text";
 export const TEXT_FIELD = "text-field";
 export const DIALOG_ACTIONS = "dialog-actions";
+export const AVATAR_MENU = "avatar-menu";
+export const ICON_BUTTON = "icon-button";
 
 // PageSelector
 export const FORM_CONTROL = "form-control";
 export const INPUT_LABEL = "input-label";
 export const SELECT_COMPONENT = "select-component";
-export const MENU_ITEM = "menu-item";
 
 // Pages
-// Home
-export const ERROR = "error";
-export const FLEX = "flex";
-
 // PageNotFound
 export const PAGE_NOT_FOUND_CONTAINER = "page-not-found-container";
 
@@ -84,3 +87,11 @@ export const ELEMENT_DETAILS_CONTAINER = "element-details-container";
 export const ELEMENT_DETAILS_PROPERTY_LIST = "element-details-property-list";
 export const ICON = "icon";
 export const PAGE = "page";
+
+// Login
+export const LOGIN = "login";
+export const LINK_TO_REGISTRATION_PAGE = "link-to-registration-page";
+
+//Register
+export const REGISTER = "register";
+export const LINK_TO_LOGIN_PAGE = "link-to-login-page";

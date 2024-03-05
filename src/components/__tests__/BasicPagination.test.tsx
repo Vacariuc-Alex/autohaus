@@ -19,6 +19,7 @@ import {
     PAGINATION_ITEM,
     PAGINATION_STACK
 } from "src/utils/constants/dataTestIds";
+import usersReducer from "src/utils/redux/usersReducer";
 
 //Test data
 const paginationItemsData = [[1, 1], [2, 2], [3, 3]];
@@ -27,6 +28,7 @@ const paginationItemsData = [[1, 1], [2, 2], [3, 3]];
 const mockStore = configureStore({
     reducer: {
         wishListStore: wishListReducer,
+        usersStore: usersReducer,
         productsStore: productsReducer,
         userSelectionStore: userSelectionReducer
     },

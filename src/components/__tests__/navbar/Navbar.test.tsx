@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "src/components/navbar/Navbar";
 import {cleanup, render, screen, within} from "@testing-library/react";
-import {stubResponseData} from "src/utils/constants/testConstants";
+import {initialState, stubProductResponseData} from "src/utils/constants/testConstants";
 import {
     APP_BAR,
     BOX,
@@ -16,6 +16,12 @@ import {
     TOOLBAR,
     TYPOGRAPHY
 } from "src/utils/constants/dataTestIds";
+import {configureStore} from "@reduxjs/toolkit";
+import wishListReducer from "src/utils/redux/wishListReducer";
+import usersReducer from "src/utils/redux/usersReducer";
+import productsReducer from "src/utils/redux/productsReducer";
+import userSelectionReducer from "src/utils/redux/userSelectionReducer";
+import {Provider} from "react-redux";
 
 //Globals
 const resultingData = jest.fn();
@@ -27,6 +33,17 @@ jest.mock("react-router-dom", () => ({
     useNavigate: () => mockedNavigate
 }));
 
+// Mock store
+const mockStore = configureStore({
+    reducer: {
+        wishListStore: wishListReducer,
+        usersStore: usersReducer,
+        productsStore: productsReducer,
+        userSelectionStore: userSelectionReducer
+    },
+    preloadedState: initialState,
+});
+
 describe("Navbar component", () => {
     afterEach(() => {
         cleanup();
@@ -34,7 +51,11 @@ describe("Navbar component", () => {
 
     describe("Should render Navbar component", () => {
         test("Navbar component with no properties", () => {
-            render(<Navbar initialData={stubResponseData} resultingData={resultingData}/>);
+            render(
+                <Provider store={mockStore}>
+                    <Navbar initialData={stubProductResponseData} resultingData={resultingData}/>);
+                </Provider>
+            );
             const appBar = screen.getByTestId(APP_BAR);
             const container = within(appBar).getByTestId(CONTAINER);
             const toolbar = within(container).getByTestId(TOOLBAR);
@@ -55,7 +76,11 @@ describe("Navbar component", () => {
         });
 
         test("Navbar component with properties", () => {
-            render(<Navbar initialData={stubResponseData} resultingData={resultingData}/>);
+            render(
+                <Provider store={mockStore}>
+                    <Navbar initialData={stubProductResponseData} resultingData={resultingData}/>);
+                </Provider>
+            );
             const appBar = screen.getByTestId(APP_BAR);
             const container = within(appBar).getByTestId(CONTAINER);
             const toolbar = within(container).getByTestId(TOOLBAR);

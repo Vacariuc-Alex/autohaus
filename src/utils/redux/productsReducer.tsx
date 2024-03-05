@@ -19,25 +19,26 @@ const productsSlice = createSlice({
     name: "productsSlice",
     initialState,
     reducers: {
-        fetchDataRequest(state: DataState) {
+        fetchProductDataRequest(state: DataState) {
             state.loading = true;
             state.error = null;
         },
-        fetchDataSuccess(state: DataState, action: PayloadAction<Product[]>) {
+        fetchProductDataSuccess(state: DataState, action: PayloadAction<Product[]>) {
             state.responseData = action.payload;
             state.isRequestExecuted = true;
             state.loading = false;
         },
-        fetchDataError(state: DataState, action: PayloadAction<string>) {
+        fetchProductDataError(state: DataState, action: PayloadAction<string>) {
             state.error = action.payload;
             state.loading = false;
-        }
+        },
+
     }
 });
 
 export const {
-    fetchDataRequest,
-    fetchDataSuccess,
-    fetchDataError
+    fetchProductDataRequest,
+    fetchProductDataSuccess,
+    fetchProductDataError
 } = productsSlice.actions;
 export default productsSlice.reducer;

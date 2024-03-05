@@ -19,6 +19,7 @@ import Searchbar from "src/components/navbar/Searchbar";
 import Pages from "src/components/navbar/Pages";
 import AddProduct from "src/components/navbar/AddProduct";
 import {LogoTextStyle} from "src/utils/styledComponents/navbar/LogoTextStyle";
+import AvatarMenu from "src/components/navbar/AvatarMenu";
 
 type NavbarProps = {
     initialData?: Product[];
@@ -39,7 +40,7 @@ const ResponsiveAppBar = (props: NavbarProps) => {
                 maxWidth="xl"
                 sx={{padding: {xs: 0, sm: 0, md: 0, lg: 0, xl: 0}, marginLeft: "105px"}}
             >
-                <Toolbar data-testid={TOOLBAR} disableGutters>
+                <Toolbar data-testid={TOOLBAR} sx={{display: "flex"}} disableGutters>
                     <FaCar
                         data-testid={FA_CAR_ICON}
                         style={{display: "flex", marginRight: 30, transform: "scale(1.5)"}}
@@ -53,13 +54,14 @@ const ResponsiveAppBar = (props: NavbarProps) => {
                     >
                         Autohaus
                     </LogoTextStyle>
-                    <Box data-testid={BOX} sx={{flexGrow: 1, display: "flex", ml: 5}}>
+                    <Box data-testid={BOX} sx={{flexGrow: 1, display: "flex", ml: 7}}>
                         <Pages data-testid={BUTTON}/>
                         {initialData && <AddProduct data-testid={BUTTON} initialData={initialData}/>}
                     </Box>
                     {initialData && resultingData &&
                         <Searchbar data-testid={SEARCH} initialData={initialData} resultingData={resultingData}/>
                     }
+                    <AvatarMenu/>
                 </Toolbar>
             </Container>
         </AppBar>

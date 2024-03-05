@@ -1,13 +1,13 @@
 import {useState} from "react";
 import axios, {AxiosResponse} from "axios";
-import {EMPTY_STRING, Product} from "src/utils/constants/constants";
+import {EMPTY_STRING, Product, User} from "src/utils/constants/constants";
 
 axios.defaults.baseURL = "http://localhost:3001";
 
 type Axios = {
     url: string;
     method: "post" | "put" | "delete";
-    body?: Product;
+    body?: Product | User;
 }
 
 const useAxios = () => {

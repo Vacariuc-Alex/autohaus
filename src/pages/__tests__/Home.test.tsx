@@ -7,25 +7,24 @@ import wishListReducer from "src/utils/redux/wishListReducer";
 import {configureStore} from "@reduxjs/toolkit";
 import {Provider} from "react-redux";
 import {deepCopy} from "src/utils/helpers/deepCopy";
-import renderer from "react-test-renderer";
-import Wishlist from "src/pages/Wishlist";
 import {
     APP_BAR,
     BOX,
     BOX_COMPONENT,
     CARD,
-    CONTENT_CANVAS,
-    ERROR,
+    CONTENT_CANVAS, ERROR,
     FLEX,
     PAGINATION_STACK,
     RIGHT_PANEL
 } from "src/utils/constants/dataTestIds";
 import userSelectionReducer, {addNewCompany, removeExistingCompany} from "src/utils/redux/userSelectionReducer";
+import usersReducer from "src/utils/redux/usersReducer";
 
 //Mock store
 const mockStore = configureStore({
     reducer: {
         wishListStore: wishListReducer,
+        usersStore: usersReducer,
         productsStore: productsReducer,
         userSelectionStore: userSelectionReducer
     },
@@ -102,6 +101,7 @@ describe("Home component", () => {
             const copyMockStore = configureStore({
                 reducer: {
                     wishListStore: wishListReducer,
+                    usersStore: usersReducer,
                     productsStore: productsReducer,
                     userSelectionStore: userSelectionReducer
                 },
@@ -118,12 +118,37 @@ describe("Home component", () => {
             expect(loading).toBeInTheDocument();
         });
 
-        test("Should display error message", () => {
+        test("Should display error message when usersStore error", () => {
+            const copyInitialState: InitialState = deepCopy(initialState);
+            copyInitialState.usersStore.error = "Mock error";
+            const copyMockStore = configureStore({
+                reducer: {
+                    wishListStore: wishListReducer,
+                    usersStore: usersReducer,
+                    productsStore: productsReducer,
+                    userSelectionStore: userSelectionReducer
+                },
+                preloadedState: copyInitialState
+            });
+
+            render(
+                <Provider store={copyMockStore}>
+                    <Home/>
+                </Provider>
+            );
+            const error = screen.getByTestId(ERROR);
+
+            expect(error).toBeInTheDocument();
+            expect(error).toHaveTextContent(`Error: ${copyInitialState.usersStore.error}`);
+        });
+
+        test("Should display error message when productsStore error", () => {
             const copyInitialState: InitialState = deepCopy(initialState);
             copyInitialState.productsStore.error = "Mock error";
             const copyMockStore = configureStore({
                 reducer: {
                     wishListStore: wishListReducer,
+                    usersStore: usersReducer,
                     productsStore: productsReducer,
                     userSelectionStore: userSelectionReducer
                 },
@@ -140,16 +165,31 @@ describe("Home component", () => {
             expect(error).toBeInTheDocument();
             expect(error).toHaveTextContent(`Error: ${copyInitialState.productsStore.error}`);
         });
-    });
 
-    test("Should match snapshot", () => {
-        const structure = renderer
-            .create(
-                <Provider store={mockStore}>
-                    <Wishlist/>
+        test("Should display error message when productsStore and usersStore error", () => {
+            const copyInitialState: InitialState = deepCopy(initialState);
+            copyInitialState.productsStore.error = "Mock error";
+            copyInitialState.usersStore.error = "Mock error";
+            const copyMockStore = configureStore({
+                reducer: {
+                    wishListStore: wishListReducer,
+                    usersStore: usersReducer,
+                    productsStore: productsReducer,
+                    userSelectionStore: userSelectionReducer
+                },
+                preloadedState: copyInitialState
+            });
+
+            render(
+                <Provider store={copyMockStore}>
+                    <Home/>
                 </Provider>
-            )
-            .toJSON();
-        expect(structure).toMatchSnapshot();
+            );
+            const error = screen.getByTestId(ERROR);
+
+            expect(error).toBeInTheDocument();
+            expect(error).toHaveTextContent(
+                `Error: ${copyInitialState.productsStore.error}, ${copyInitialState.usersStore.error}`);
+        });
     });
 });

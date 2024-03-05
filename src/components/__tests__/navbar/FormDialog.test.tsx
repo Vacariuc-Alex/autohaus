@@ -11,7 +11,7 @@ import {
 } from "src/utils/constants/dataTestIds";
 import React from "react";
 import FormDialog from "src/components/navbar/FormDialog";
-import {stubResponseData} from "src/utils/constants/testConstants";
+import {stubProductOne} from "src/utils/constants/testConstants";
 import {productSchema} from "src/utils/helpers/schemes";
 
 // Globals
@@ -27,9 +27,8 @@ const editedProduct = [
 
 // Props
 const action = "EDIT";
-const stubProductWithNoImages = stubResponseData[0];
 const stubProductWithTwoImages = {
-    ...stubResponseData[0],
+    ...stubProductOne,
     images: [
         "https://example.original.1.jpeg",
         "https://example.original.2.jpeg",
@@ -88,7 +87,7 @@ describe("FormDialog component", () => {
         render(
             <FormDialog
                 action={action}
-                product={stubProductWithNoImages}
+                product={stubProductOne}
                 closeDialog={closeDialog}
                 formSubmission={formSubmission}/>
         );
@@ -127,7 +126,7 @@ describe("FormDialog component", () => {
         render(
             <FormDialog
                 action={action}
-                product={stubProductWithNoImages}
+                product={stubProductOne}
                 closeDialog={closeDialog}
                 formSubmission={formSubmission}/>
         );
@@ -141,13 +140,13 @@ describe("FormDialog component", () => {
     });
 
     test("Should validate form and rise alert when user enters invalid data for year property", async () => {
-        jest.spyOn(productSchema, 'validate').mockRejectedValue(new Error("Validation error"));
+        jest.spyOn(productSchema, "validate").mockRejectedValue(new Error("Validation error"));
         global.alert = jest.fn();
 
         render(
             <FormDialog
                 action={action}
-                product={stubProductWithNoImages}
+                product={stubProductOne}
                 closeDialog={closeDialog}
                 formSubmission={formSubmission}/>
         );

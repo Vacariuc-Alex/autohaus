@@ -5,7 +5,7 @@ import {addItem, removeItem} from "src/utils/redux/wishListReducer";
 import {useDispatch, useSelector} from "react-redux"
 import {FavouriteArea} from "src/utils/styledComponents/infoCard/FavouriteArea";
 import {IoIosHeart, IoIosHeartEmpty} from "react-icons/io";
-import {EMPTY_STRING, Product} from "src/utils/constants/constants";
+import {EMPTY_STRING, ONE, Product, ZERO} from "src/utils/constants/constants";
 import {RootState} from "src/utils/redux/store";
 import {encryptText} from "src/utils/helpers/encryption";
 import {
@@ -38,7 +38,7 @@ const InfoCard = (props: InfoCardProps) => {
     });
 
     // Other hooks
-    const [favouriteAreaVisibility, setFavouriteAreaVisibility] = useState({opacity: "0", transition: EMPTY_STRING});
+    const [favouriteAreaVisibility, setFavouriteAreaVisibility] = useState({opacity: ZERO, transition: EMPTY_STRING});
     const [imageError, setImageError] = useState(false);
 
     // Verifiers
@@ -52,9 +52,9 @@ const InfoCard = (props: InfoCardProps) => {
 
     useEffect(() => {
         if (!isProductFavourite) {
-            toggleFavouriteAreaVisibility("0");
+            toggleFavouriteAreaVisibility(ZERO);
         } else {
-            toggleFavouriteAreaVisibility("1");
+            toggleFavouriteAreaVisibility(ONE);
         }
     }, [productProps]);
 
@@ -65,16 +65,16 @@ const InfoCard = (props: InfoCardProps) => {
         } else {
             dispatch(removeItem(id));
         }
-        toggleFavouriteAreaVisibility(e.target.checked ? "1" : "0");
+        toggleFavouriteAreaVisibility(e.target.checked ? ONE : ZERO);
     }
 
     const handleOnMouseEnter = () => {
-        toggleFavouriteAreaVisibility("1");
+        toggleFavouriteAreaVisibility(ONE);
     }
 
     const handleOnMouseLeave = () => {
         if (!isProductFavourite) {
-            toggleFavouriteAreaVisibility("0");
+            toggleFavouriteAreaVisibility(ZERO);
         }
     }
 

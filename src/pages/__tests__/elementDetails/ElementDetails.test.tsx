@@ -4,7 +4,13 @@ import {configureStore} from "@reduxjs/toolkit";
 import wishListReducer from "src/utils/redux/wishListReducer";
 import productsReducer from "src/utils/redux/productsReducer";
 import userSelectionReducer from "src/utils/redux/userSelectionReducer";
-import {assertedMockHeaders, InitialState, initialState, mockedResponse} from "src/utils/constants/testConstants";
+import {
+    assertedMockHeaders,
+    InitialState,
+    initialState,
+    mockedResponse,
+    stubUser
+} from "src/utils/constants/testConstants";
 import {Provider} from "react-redux";
 import {
     APP_BAR,
@@ -27,15 +33,21 @@ import {
 } from "src/utils/constants/alertMessages";
 import React from "react";
 import {delay} from "src/utils/helpers/delay";
+import usersReducer from "src/utils/redux/usersReducer";
+import {AUTHENTICATED_USER, DEFAULT_EXPIRATION_PERIOD, EMPTY_STRING} from "src/utils/constants/constants";
+import {
+    deleteItemFromLocalStorage,
+    setItemInLocalStorageWithExpiration
+} from "src/utils/helpers/sessionStorageWithExpiration";
 
 // Mock useNavigate
 // Mock useParams
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
+jest.mock("react-router-dom", () => ({
+    ...jest.requireActual("react-router-dom"),
     useParams: () => ({
-        id: 'MQ=='
+        id: "MQ=="
     }),
-    useRouteMatch: () => ({url: '/product/MQ=='}),
+    useRouteMatch: () => ({url: "/product/MQ=="}),
     useNavigate: () => jest.fn()
 }));
 
@@ -43,6 +55,7 @@ jest.mock('react-router-dom', () => ({
 const mockStore = configureStore({
     reducer: {
         wishListStore: wishListReducer,
+        usersStore: usersReducer,
         productsStore: productsReducer,
         userSelectionStore: userSelectionReducer
     },
@@ -64,9 +77,10 @@ Object.defineProperty(window, "location", {
 
 describe("ElementDetails component", () => {
     beforeEach(() => {
+        setItemInLocalStorageWithExpiration(AUTHENTICATED_USER, stubUser, DEFAULT_EXPIRATION_PERIOD);
         mockedAxios.default.mockImplementation(() => ({
             response: mockedResponse,
-            error: "",
+            error: EMPTY_STRING,
             loading: false,
             executeHttpRequest: executeHttpRequestMock
         }));
@@ -74,6 +88,7 @@ describe("ElementDetails component", () => {
 
     afterEach(() => {
         cleanup();
+        deleteItemFromLocalStorage(AUTHENTICATED_USER);
     });
 
     describe("Should render ElementDetails component", () => {
@@ -102,6 +117,7 @@ describe("ElementDetails component", () => {
             const copyMockStore = configureStore({
                 reducer: {
                     wishListStore: wishListReducer,
+                    usersStore: usersReducer,
                     productsStore: productsReducer,
                     userSelectionStore: userSelectionReducer
                 },
@@ -122,7 +138,7 @@ describe("ElementDetails component", () => {
             copyMockedResponse.config = {headers: assertedMockHeaders, method: "put"};
             mockedAxios.default.mockImplementation(() => ({
                 response: copyMockedResponse,
-                error: "",
+                error: EMPTY_STRING,
                 loading: false,
                 executeHttpRequest: jest.fn()
             }));
@@ -141,7 +157,7 @@ describe("ElementDetails component", () => {
             copyMockedResponse.config = {headers: assertedMockHeaders, method: "delete"};
             mockedAxios.default.mockImplementation(() => ({
                 response: copyMockedResponse,
-                error: "",
+                error: EMPTY_STRING,
                 loading: false,
                 executeHttpRequest: jest.fn()
             }));
@@ -160,7 +176,7 @@ describe("ElementDetails component", () => {
             copyMockedResponse.config = {headers: assertedMockHeaders, method: "default"};
             mockedAxios.default.mockImplementation(() => ({
                 response: copyMockedResponse,
-                error: "",
+                error: EMPTY_STRING,
                 loading: false,
                 executeHttpRequest: jest.fn()
             }));

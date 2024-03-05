@@ -10,7 +10,7 @@ import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import {createProductObjectFromFormData} from "src/utils/helpers/createProductObject";
 import {productSchema} from "src/utils/helpers/schemes";
 import {delay} from "src/utils/helpers/delay";
-import {Product} from "src/utils/constants/constants";
+import {EMPTY_STRING, Product} from "src/utils/constants/constants";
 import {
     BUTTON,
     DIALOG, DIALOG_ACTIONS,
@@ -38,12 +38,12 @@ export default function FormDialog(props: DialogFormProps) {
     const [amountOfImages, setAmountOfImages] = useState<number>(1);
 
     // Initializing form data for edit request
-    const [company, setCompany] = useState<string>("");
-    const [model, setModel] = useState<string>("");
-    const [year, setYear] = useState<string>("");
-    const [vin, setVin] = useState<string>("");
-    const [color, setColor] = useState<string>("");
-    const [price, setPrice] = useState<string>("");
+    const [company, setCompany] = useState<string>(EMPTY_STRING);
+    const [model, setModel] = useState<string>(EMPTY_STRING);
+    const [year, setYear] = useState<string>(EMPTY_STRING);
+    const [vin, setVin] = useState<string>(EMPTY_STRING);
+    const [color, setColor] = useState<string>(EMPTY_STRING);
+    const [price, setPrice] = useState<string>(EMPTY_STRING);
     const [images, setImages] = useState<string[]>([]);
 
     useEffect(() => {
@@ -90,9 +90,9 @@ export default function FormDialog(props: DialogFormProps) {
         price = price.replace(/[^\d.,]/g, "").replace(/,/g, ".").replace(/(\..*)\./g, "$1");
 
         // Check if the number has more than two decimal places and truncate the excess
-        const parts = price.split('.');
+        const parts = price.split(".");
         if (parts[1] && parts[1].length > 2) {
-            price = parts[0] + '.' + parts[1].slice(0, 2);
+            price = parts[0] + "." + parts[1].slice(0, 2);
         }
         setPrice(price);
     }
