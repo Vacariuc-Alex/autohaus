@@ -31,8 +31,7 @@ const productsSlice = createSlice({
         fetchProductDataError(state: DataState, action: PayloadAction<string>) {
             state.error = action.payload;
             state.loading = false;
-        },
-
+        }
     }
 });
 
