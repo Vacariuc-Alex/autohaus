@@ -1,35 +1,55 @@
-import {EMPTY_STRING, Product} from "src/utils/constants/constants";
+import {EMPTY_STRING, Product, User} from "src/utils/constants/constants";
 import {AxiosRequestHeaders, AxiosResponse} from "axios";
 
-export const stubResponseData = [
-    {
-        id: "1",
-        company: "WAZ",
-        model: "2106",
-        year: 1986,
-        vin: "JTDZN3EU4E3035524",
-        color: "Red",
-        price: 250,
-        isFavourite: false
-    },
-    {
-        id: "2",
-        company: "UAZ",
-        model: "452",
-        year: 1965,
-        vin: "WAURGAFD1DN635608",
-        color: "Green",
-        price: 100,
-        isFavourite: false
-    },
-];
+//Data stubs
+export const stubUser: User = {
+    id: "1",
+    username: "Test",
+    email: "test@example.com",
+    password: "dGVzdA==",
+    role: "ADMIN",
+};
 
+export const stubProductOne: Product = {
+    id: "1",
+    company: "WAZ",
+    model: "2106",
+    year: 1986,
+    vin: "JTDZN3EU4E3035524",
+    color: "Red",
+    price: 250,
+    owner: stubUser,
+    isFavourite: false
+};
+
+export const stubProductTwo: Product = {
+    id: "2",
+    company: "UAZ",
+    model: "452",
+    year: 1965,
+    vin: "WAURGAFD1DN635608",
+    color: "Green",
+    price: 100,
+    owner: stubUser,
+    isFavourite: false
+};
+
+export const stubUserResponseData: User[] = [stubUser];
+export const stubProductResponseData: Product[] = [stubProductOne, stubProductTwo];
+
+// Mock redux initial state
 export type InitialState = {
     wishListStore: {
         ids: string[];
     },
     productsStore: {
         responseData: Product[];
+        loading: boolean;
+        error: string | null;
+        isRequestExecuted: boolean;
+    },
+    usersStore: {
+        responseData: User[];
         loading: boolean;
         error: string | null;
         isRequestExecuted: boolean;
@@ -47,7 +67,13 @@ export const initialState: InitialState = {
         ids: []
     },
     productsStore: {
-        responseData: stubResponseData,
+        responseData: stubProductResponseData,
+        loading: false,
+        error: EMPTY_STRING,
+        isRequestExecuted: true
+    },
+    usersStore: {
+        responseData: stubUserResponseData,
         loading: false,
         error: EMPTY_STRING,
         isRequestExecuted: true

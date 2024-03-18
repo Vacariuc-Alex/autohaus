@@ -1,10 +1,10 @@
 import {cleanup, render, screen, within} from "@testing-library/react";
-import {stubResponseData} from "src/utils/constants/testConstants";
+import {stubProductOne} from "src/utils/constants/testConstants";
 import ImageCarousel from "src/pages/elementDetails/ImageCarousel";
 import {IMG, PAGE} from "src/utils/constants/dataTestIds";
 
 // Globals
-const stubProduct = {...stubResponseData[0], images: ["https://example.jpeg"]};
+const stubProduct = {...stubProductOne, images: ["https://example.jpeg"]};
 
 describe("ImageCarousel component", () => {
     afterEach(() => {

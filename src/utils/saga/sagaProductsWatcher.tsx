@@ -1,5 +1,5 @@
 import {call, put, takeEvery} from "redux-saga/effects";
-import {fetchDataError, fetchDataRequest, fetchDataSuccess} from "src/utils/redux/productsReducer";
+import {fetchProductDataError, fetchProductDataRequest, fetchProductDataSuccess} from "src/utils/redux/productsReducer";
 import axios from "axios";
 
 const fetchAxios = () => {
@@ -10,14 +10,14 @@ function* workGetProductsFetch(): Generator<any, void, any> {
     try {
         const response = yield call(fetchAxios);
         const data = yield response.data;
-        yield put(fetchDataSuccess(data));
+        yield put(fetchProductDataSuccess(data));
     } catch (error: any) {
-        yield put(fetchDataError(error.message));
+        yield put(fetchProductDataError(error.message));
     }
 }
 
 function* sagaProductsWatcher(): Generator<any, void> {
-    yield takeEvery(fetchDataRequest.type, workGetProductsFetch);
+    yield takeEvery(fetchProductDataRequest.type, workGetProductsFetch);
 }
 
 export default sagaProductsWatcher;

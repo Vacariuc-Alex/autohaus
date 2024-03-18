@@ -10,3 +10,6 @@ export const PRODUCT_UPDATED_SUCCESSFULLY = "The product has been successfully m
 export const PRODUCT_DELETED_SUCCESSFULLY = "The product has been successfully removed!";
 export const UNKNOWN_REQUEST_TYPE =
     "We're sorry, but we couldn't fulfill your request due to an unexpected error";
+export const USER_REGISTER_FAILED = "There was an issue with the registration process!" +
+    "\nPlease try again later or refresh the page!" +
+    "\nThe request failed with the following reason: ";

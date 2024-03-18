@@ -3,8 +3,8 @@ import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "src/utils/redux/store";
 import {decryptText} from "src/utils/helpers/encryption";
-import {EMPTY_STRING, Product} from "src/utils/constants/constants";
-import {fetchDataRequest} from "src/utils/redux/productsReducer";
+import {AUTHENTICATED_USER, EMPTY_STRING, Product} from "src/utils/constants/constants";
+import {fetchProductDataRequest} from "src/utils/redux/productsReducer";
 import useAxios from "src/utils/hooks/useAxios";
 import Navbar from "src/components/navbar/Navbar";
 import FormDialog from "src/components/navbar/FormDialog";
@@ -30,8 +30,13 @@ import {
 } from "src/utils/constants/dataTestIds";
 import {createSelector} from "@reduxjs/toolkit";
 import {removeItem} from "src/utils/redux/wishListReducer";
+import {getItemFromLocalStorageWithExpiration} from "src/utils/helpers/sessionStorageWithExpiration";
+import {areObjectsEqual} from "src/utils/helpers/areObjectsEqual";
 
 const ElementDetails = () => {
+
+    // Globals
+    const authenticatedUser = getItemFromLocalStorageWithExpiration(AUTHENTICATED_USER);
 
     // Redux hooks
     const dispatch = useDispatch();
@@ -44,7 +49,7 @@ const ElementDetails = () => {
     const selector = useSelector(combinedSelector);
 
     //Redux Simplified variable names
-    const responseData: Product[] = selector.productsStoreSelector.responseData;
+    const productResponseData: Product[] = selector.productsStoreSelector.responseData;
     const wishlistIds: string[] = selector.wishListStoreSelector.ids;
 
     // Other hooks
@@ -63,20 +68,20 @@ const ElementDetails = () => {
         const elementId = id ? decryptText(id) : EMPTY_STRING;
         setElementId(elementId);
 
-        const foundProduct = responseData.find((e: any) => {
+        const foundProduct = productResponseData.find((e: any) => {
             return elementId !== EMPTY_STRING && elementId === e.id;
         });
         setProduct(foundProduct);
     }
 
     useEffect(() => {
-        if (responseData.length === 0) {
-            dispatch(fetchDataRequest());
+        if (productResponseData.length === 0) {
+            dispatch(fetchProductDataRequest());
             return;
         }
         setIsPageLoaded(true);
         findElementByPassedIdFromEndpoint();
-    }, [responseData, id]);
+    }, [productResponseData, id]);
 
     // useEffect hook used to inform user about success or failure of http request
     const removeIdFromWishlistStore = () => {
@@ -111,19 +116,20 @@ const ElementDetails = () => {
     }, [response, error]);
 
     // Handlers used for "put" http requests, which require form submission
-    const handleFormSubmit = async (e: Product) => {
+    const handleFormSubmit = async (editedProduct: any, initialProduct: Product) => {
         executeHttpRequest({
             url: `/products/${elementId}`,
             method: "put",
             body: {
                 id: `${elementId}`,
-                company: e.company,
-                model: e.model,
-                year: e.year,
-                vin: e.vin,
-                color: e.color,
-                price: e.price,
-                images: e.images
+                company: editedProduct.company,
+                model: editedProduct.model,
+                year: editedProduct.year,
+                vin: editedProduct.vin,
+                color: editedProduct.color,
+                price: editedProduct.price,
+                owner: initialProduct.owner,
+                images: editedProduct.images
             }
         });
     }
@@ -153,11 +159,13 @@ const ElementDetails = () => {
                     <ImageCarousel product={product}/>
                     <ElementDetailsPropertyList data-testid={ELEMENT_DETAILS_PROPERTY_LIST}>
                         <ElementProperties data-testid={ELEMENT_PROPERTIES_CONTAINER} product={product}/>
-                        <ElementControls
-                            data-testid={ELEMENT_CONTROLS_CONTAINER}
-                            handleOnDeleteClick={handleOnDeleteClick}
-                            handleOnUpdateClick={handleOnUpdateClick}
-                        />
+                        {authenticatedUser && areObjectsEqual(product.owner, authenticatedUser.value) &&
+                            <ElementControls
+                                data-testid={ELEMENT_CONTROLS_CONTAINER}
+                                handleOnDeleteClick={handleOnDeleteClick}
+                                handleOnUpdateClick={handleOnUpdateClick}
+                            />
+                        }
                     </ElementDetailsPropertyList>
                 </ElementDetailsContainer>
 
@@ -166,7 +174,7 @@ const ElementDetails = () => {
                         data-testid={DIALOG}
                         action="EDIT"
                         closeDialog={handleCloseDialog}
-                        formSubmission={handleFormSubmit}
+                        formSubmission={(editedProduct) => handleFormSubmit(editedProduct, product)}
                         product={product}
                     />
                 }

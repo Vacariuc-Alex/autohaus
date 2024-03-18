@@ -4,6 +4,7 @@ import rootSaga from "src/utils/saga/rootSaga";
 import wishListReducer from "src/utils/redux/wishListReducer";
 import productsReducer from "src/utils/redux/productsReducer";
 import userSelectionReducer from "src/utils/redux/userSelectionReducer";
+import usersReducer from "src/utils/redux/usersReducer";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -11,6 +12,7 @@ export const store = configureStore({
     reducer: {
         wishListStore: wishListReducer,
         productsStore: productsReducer,
+        usersStore: usersReducer,
         userSelectionStore: userSelectionReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware)

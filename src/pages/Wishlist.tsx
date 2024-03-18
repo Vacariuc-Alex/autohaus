@@ -11,19 +11,21 @@ import {APP_BAR, CARD, CONTENT_CANVAS, NO_ITEMS_CONTAINER} from "src/utils/const
 
 const Wishlist = () => {
 
-    const selectWishListIds = (state: RootState) => state.wishListStore.ids;
+    const wishListIdsSelector = (state: RootState) => state.wishListStore.ids;
     const selectResponseData = (state: RootState) => state.productsStore.responseData;
-    const selectorCombiner = (wishListIds: string[], responseData: Product[]) => {
+    const selectorCombiner = (wishListIds: string[], productResponseData: Product[]) => {
         return {
             wishListIds,
-            responseData
+            productResponseData
         };
     }
-    const combinedSelector = createSelector(selectWishListIds, selectResponseData, selectorCombiner);
+    const combinedSelector = createSelector(wishListIdsSelector, selectResponseData, selectorCombiner);
     const selector = useSelector(combinedSelector);
 
     const getElement = (e: string): Product | undefined => {
-        return selector.responseData.find((responseDataElement) => responseDataElement.id === e);
+        return selector
+            .productResponseData
+            .find((productResponseDataElement) => productResponseDataElement.id === e);
     }
 
     const renderProductsInWishList = (() => {

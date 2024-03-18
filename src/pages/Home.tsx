@@ -7,7 +7,8 @@ import PageSelector from "src/components/PageSelector";
 import BasicPagination from "src/components/BasicPagination";
 import Navbar from "src/components/navbar/Navbar";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchDataRequest} from "src/utils/redux/productsReducer";
+import {fetchProductDataRequest} from "src/utils/redux/productsReducer";
+import {fetchUserDataRequest} from "src/utils/redux/usersReducer";
 import {RootState} from "src/utils/redux/store";
 import {Product} from "src/utils/constants/constants";
 import Loading from "src/components/Loading";
@@ -29,16 +30,22 @@ import {
 const Home = () => {
 
     //Globals
-    const LOADING_CONDITION = () => products?.length && searchedProducts?.length !== 0;
+    const doProductsExist = () => products?.length && searchedProducts?.length !== 0;
 
     // Redux hooks
     const dispatch = useDispatch();
     const productsStoreSelector = (state: RootState) => state.productsStore;
+    const userStoreSelector = (state: RootState) => state.usersStore;
     const userSelectionStoreSelector = (state: RootState) => state.userSelectionStore;
-    const selectorCombiner = (productsStoreSelector: any, userSelectionStoreSelector: any) => {
-        return {productsStoreSelector, userSelectionStoreSelector}
+    const selectorCombiner = (productsStoreSelector: any, userStoreStore: any, userSelectionStoreSelector: any) => {
+        return {productsStoreSelector, userStoreStore, userSelectionStoreSelector}
     }
-    const combinedSelector = createSelector(productsStoreSelector, userSelectionStoreSelector, selectorCombiner);
+    const combinedSelector = createSelector(
+        productsStoreSelector,
+        userStoreSelector,
+        userSelectionStoreSelector,
+        selectorCombiner
+    );
     const selector = useSelector(combinedSelector);
 
     //Redux Simplified variable names
@@ -47,18 +54,32 @@ const Home = () => {
     const elementsPerPage = selector.userSelectionStoreSelector.elementsPerPage;
 
     //useState hooks
-    const [products, setProducts] = useState<Product[]>([]); //Products to be displayed
-    const [searchedProducts, setSearchedProducts] = useState<Product[]>([]); // Products that were found by searchbar text
-    const [isHomePageLoaded, setIsHomePageLoaded] = useState<boolean>(false); //This variable is used for verifying that all other states are loaded correctly (only for Home page)
+    // Products to be displayed
+    const [products, setProducts] = useState<Product[]>([]);
+    // Products that were found by searchbar text
+    const [searchedProducts, setSearchedProducts] = useState<Product[]>([]);
+    // This variable is used for verifying that all other states are loaded correctly (only for Home page)
+    const [isHomePageLoaded, setIsHomePageLoaded] = useState<boolean>(false);
 
     //Saga destructor
-    const {responseData, error, loading, isRequestExecuted} = selector.productsStoreSelector;
+    const {
+        responseData: productResponseData,
+        error: productError,
+        loading: productLoading,
+        isRequestExecuted: isProductRequestExecuted
+    } = selector.productsStoreSelector;
+
+    const {
+        error: userError,
+        loading: userLoading,
+        isRequestExecuted: isUserRequestExecuted
+    } = selector.userStoreStore;
 
     //useEffect helpers
-    const filterProductsByCompanies = (responseData: Product[], companies: string[]) => {
+    const filterProductsByCompanies = (productResponseData: Product[], companies: string[]) => {
         return companies.length !== 0
-            ? responseData.filter((e: Product) => companies.includes(e.company))
-            : responseData;
+            ? productResponseData.filter((e: Product) => companies.includes(e.company))
+            : productResponseData;
     }
 
     const calculateNumberOfPages = (sortedProducts: Product[], elementsPerPage: number) => {
@@ -85,20 +106,23 @@ const Home = () => {
     }
 
     //useEffects
+    //initializes data while page is loading
     useEffect(() => {
         // By default, searchedProducts contains all fetched products
         if (searchedProducts.length !== 0) {
             setIsHomePageLoaded(true);
             displayElements();
         }
-    }, [companies, currentPage, elementsPerPage, responseData, searchedProducts]);
+    }, [companies, currentPage, elementsPerPage, productResponseData, searchedProducts]);
 
+    //fetches data from backend
     useEffect(() => {
         //To avoid fetching each time useNavigate is triggered
-        if (!isRequestExecuted) {
-            dispatch(fetchDataRequest());
+        if (!isProductRequestExecuted || !isUserRequestExecuted) {
+            dispatch(fetchProductDataRequest());
+            dispatch(fetchUserDataRequest());
         }
-    }, [isRequestExecuted]);
+    }, [isProductRequestExecuted, isUserRequestExecuted]);
 
     // Callback for searchbar in navbar
     const handleResultingData = (e: Product[]) => {
@@ -106,19 +130,28 @@ const Home = () => {
     }
 
     //Pre-executed render block
-    if (error) {
-        return (
-            <h1 data-testid={ERROR}>Error: {error}</h1>
-        );
-    } else if (loading) {
-        return (
-            <Loading data-testid={BOX}/>
-        );
+    switch (true) {
+        case !!(productError && userError):
+            return (
+                <h1 data-testid={ERROR}>Error: {`${productError}, ${userError}`}</h1>
+            );
+        case !!(productError):
+            return (
+                <h1 data-testid={ERROR}>Error: {`${productError}`}</h1>
+            );
+        case !!(userError):
+            return (
+                <h1 data-testid={ERROR}>Error: {`${userError}`}</h1>
+            );
+        case productLoading || userLoading:
+            return (
+                <Loading data-testid={BOX}/>
+            );
     }
 
     //Render
     const renderProductListOrNotFound = (() => {
-        if (LOADING_CONDITION()) {
+        if (doProductsExist()) {
             return products.map((e, i) => (
                 <InfoCard data-testid={CARD} productProps={e} key={i}/>
             ));
@@ -130,7 +163,7 @@ const Home = () => {
     })();
 
     const renderPagination = (() => {
-        if (LOADING_CONDITION() && isHomePageLoaded) {
+        if (doProductsExist() && isHomePageLoaded) {
             return (
                 <>
                     <PageSelector data-testid={BOX_COMPONENT}/>
@@ -140,15 +173,14 @@ const Home = () => {
         }
     })();
 
-
     return (
         <>
-            <Navbar data-testid={APP_BAR} initialData={responseData} resultingData={handleResultingData}/>
+            <Navbar data-testid={APP_BAR} initialData={productResponseData} resultingData={handleResultingData}/>
             <Flex data-testid={FLEX}>
                 <ContentCanvas data-testid={CONTENT_CANVAS}>
                     {renderProductListOrNotFound}
                 </ContentCanvas>
-                {LOADING_CONDITION() && <CompanyFilter data-testid={RIGHT_PANEL}/>}
+                {doProductsExist() && <CompanyFilter data-testid={RIGHT_PANEL}/>}
             </Flex>
             {renderPagination}
         </>

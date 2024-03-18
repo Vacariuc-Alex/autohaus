@@ -7,11 +7,13 @@ import {initialState} from "src/utils/constants/testConstants";
 import wishListReducer from "src/utils/redux/wishListReducer";
 import userSelectionReducer from "src/utils/redux/userSelectionReducer";
 import {CHECKBOX, FORM_CONTROL_LABEL, FORM_GROUP, RIGHT_PANEL} from "src/utils/constants/dataTestIds";
+import usersReducer from "src/utils/redux/usersReducer";
 
 // Mock store
 const mockStore = configureStore({
     reducer: {
         wishListStore: wishListReducer,
+        usersStore: usersReducer,
         productsStore: productsReducer,
         userSelectionStore: userSelectionReducer
     },

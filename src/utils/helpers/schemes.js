@@ -20,3 +20,23 @@ export const productSchema = object().shape({
         })
     )
 });
+
+export const userLoginSchema = object().shape({
+    username: string().required(),
+    password: string().required()
+});
+
+export const userRegistrationSchema = object().shape({
+    username: string().required(),
+    email: string().required().email(),
+    password: string().required().matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/,
+        "The password is of incorrect format!" +
+        "\nShould contain at lease onr lowercase character, " +
+        "one uppercase character, one digit, one symbol, and to have at lease 8 characters!"),
+    avatar: string().matches(
+        /^\s*$|https?:\/\/\S*\.(?:png|jpe?g|gif|webp)/i,
+        "Invalid URL for image!\nPlease provide a valid image URL!" +
+        "\nExample of valid image URL: https://example.com/image.png"
+    )
+});

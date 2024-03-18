@@ -14,6 +14,7 @@ const initialState: DataState = {
     elementsPerPage: 10
 }
 
+// Stores the options that user has selected from pagination and filter
 export const userSelectionSlice = createSlice({
     name: "userSelectionSlice",
     initialState,

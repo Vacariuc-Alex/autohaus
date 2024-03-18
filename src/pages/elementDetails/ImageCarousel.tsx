@@ -1,9 +1,13 @@
 import {NavigateBefore, NavigateNext} from "@mui/icons-material";
 import React from "react";
-import Paper from "@mui/material/Paper";
 import {Product} from "src/utils/constants/constants";
-import {ImageCarouselContainer} from "src/utils/styledComponents/elementDetails/carousel/CarouselContainer";
+import {
+    ImageCarouselStyledContainer
+} from "src/utils/styledComponents/elementDetails/carousel/ImageCarouselStyledContainer";
 import {IMG, PAGE} from "src/utils/constants/dataTestIds";
+import {ImageStyledContainer} from "src/utils/styledComponents/elementDetails/carousel/ImageStyledContainer";
+import {PaperStyledContainer} from "src/utils/styledComponents/elementDetails/carousel/PaperStyledContainer";
+import noImage from "src/assets/img/NoImage.jpg";
 
 type CarouselProps = {
     product: Product;
@@ -12,21 +16,21 @@ type CarouselProps = {
 const ImageCarousel = (props: CarouselProps) => {
     const {product} = props;
     return (
-        <ImageCarouselContainer
-            navButtonsAlwaysVisible={true}
-            PrevIcon={<NavigateBefore/>}
-            NextIcon={<NavigateNext/>}
-        >
-            {product && product.images &&
+        <ImageCarouselStyledContainer PrevIcon={<NavigateBefore/>} NextIcon={<NavigateNext/>}>
+            {product && product.images && product.images.length > 0 ? (
                 product.images.map((e, i) => {
                     return (
-                        <Paper data-testid={PAGE} key={i}>
-                            <img data-testid={IMG} src={e} alt="autoImg"/>
-                        </Paper>
+                        <PaperStyledContainer data-testid={PAGE} key={i} elevation={0}>
+                            <ImageStyledContainer data-testid={IMG} src={e} alt="autoImg"/>
+                        </PaperStyledContainer>
                     );
-                })
+                })) : (
+                    <PaperStyledContainer data-testid={PAGE} elevation={0}>
+                        <ImageStyledContainer data-testid={IMG} src={noImage} alt="autoImg"/>
+                    </PaperStyledContainer>
+                )
             }
-        </ImageCarouselContainer>
+        </ImageCarouselStyledContainer>
     );
 }
 
